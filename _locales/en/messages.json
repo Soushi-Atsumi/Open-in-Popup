@@ -1,0 +1,36 @@
+{
+  "extensionDescription": {
+    "message": "Open a link in the popup.",
+    "description": "Description of the extension."
+  },
+
+  "extensionName": {
+    "message": "Open in Popup",
+    "description": "Name of the extension."
+  },
+
+  "openingProtocolHttp": {
+    "message": "Use http",
+    "description": "Specify http"
+  },
+
+  "openingProtocolHttps": {
+    "message": "Use https",
+    "description": "Specify https"
+  },
+
+  "tutorial": {
+    "message": "Open a tutorial",
+    "description": "Open a link of a tutorial"
+  },
+
+  "url_error.html": {
+    "message": "/error.html",
+    "description": "An error page."
+  },
+
+  "url_index.html": {
+    "message": "/index.html",
+    "description": "Tutorial of the extension."
+  }
+}
