@@ -1,4 +1,37 @@
 {
+  "alwaysOpenFromLink": {
+    "message": "Always open a link"
+  },
+
+  "alwaysOpenFromSelection": {
+    "message": "Always open a selection"
+  },
+
+  "alwaysUsesHttp": {
+    "message": "Always uses http"
+  },
+
+  "alwaysUsesHttps": {
+    "message": "Always uses https"
+  },
+
+  "alwaysViewSourceFromLink": {
+    "message": "Always view source of a link"
+  },
+
+  "alwaysViewSourceFromSelection": {
+    "message": "Always view source of a selection"
+  },
+
+  "ask": {
+    "message": "Ask"
+  },
+
+  "errorHTMLTitle": {
+    "message": "Error",
+    "description": "The title of error.html."
+  },
+
   "extensionDescription": {
     "message": "Open a link in the popup.",
     "description": "Description of the extension."
@@ -9,28 +42,104 @@
     "description": "Name of the extension."
   },
 
-  "openingProtocolHttp": {
-    "message": "Use http",
-    "description": "Specify http"
+  "iconImageAlt": {
+    "message": "The icon of this extension.",
+    "description": "The alternate description of the icon of this extention."
   },
 
-  "openingProtocolHttps": {
-    "message": "Use https",
-    "description": "Specify https"
+  "indexHTMLCaution": {
+    "message": "Caution: In case of selecting url which has https, https will be used even if you select http.",
+    "description": "Cautions of this extention."
+  },
+
+  "indexHTMLHeading1": {
+    "message": "1.Right click a link or right click selected characters, then choose \"Open in Popup\".",
+    "description": "The first heading of index.html."
+  },
+
+  "indexHTMLHeading2": {
+    "message": "2.Choose the type what you want to open and open the link(choose https if you are not sure).",
+    "description": "The second heading of index.html."
+  },
+
+  "indexHTMLTitle": {
+    "message": "Tutorial",
+    "description": "The title of index.html."
+  },
+
+  "indexHTMLTutorialVideo": {
+    "message": "https://drive.google.com/file/d/1LCdlzMaZ64ShXpushvZh6JiefS_mex0l/preview",
+    "description": "The url of tutorial video."
+  },
+
+  "openingProtocolHttpFromLink": {
+    "message": "Use http(Link)",
+    "description": "Specify http(Link)"
+  },
+
+  "openingProtocolHttpFromSelection": {
+    "message": "Use http(Selection)",
+    "description": "Specify http(Selection)"
+  },
+
+  "openingProtocolViewSourceHttpFromLink": {
+    "message": "Use http(View source of the link)",
+    "description": "Use http(View source of the link)"
+  },
+
+  "openingProtocolViewSourceHttpFromSelection": {
+    "message": "Use http(View source of the selection)",
+    "description": "Specify http(View source of the selection)"
+  },
+
+  "openingProtocolHttpsFromLink": {
+    "message": "Use https(Link)",
+    "description": "Specify https(Link)"
+  },
+
+  "openingProtocolHttpsFromSelection": {
+    "message": "Use https(Selection)",
+    "description": "Specify https(Selection)"
+  },
+
+  "openingProtocolViewSourceHttpsFromLink": {
+    "message": "Use https(View source of the link)",
+    "description": "Use https(View source of the link)"
+  },
+
+  "openingProtocolViewSourceHttpsFromSelection": {
+    "message": "Use https(View source of the selection)",
+    "description": "Specify https(View source of the selection)"
+  },
+
+  "optionsHTMLTitle": {
+    "message": "Options",
+    "description": "The title of options.html."
+  },
+
+  "protocol": {
+    "message": "Protocol"
+  },
+
+  "target": {
+    "message": "Target"
+  },
+
+  "ThisUrlIsNotAValidUrl": {
+    "message": "This url is not a valid url."
   },
 
   "tutorial": {
     "message": "Open a tutorial",
-    "description": "Open a link of a tutorial"
+    "description": "Open a link of a tutorial."
   },
 
-  "url_error.html": {
-    "message": "/error.html",
-    "description": "An error page."
+  "tutorialTitle": {
+    "message": "Open in Popup - Tutorial",
+    "description": "The title of the tutorial."
   },
 
-  "url_index.html": {
-    "message": "/index.html",
-    "description": "Tutorial of the extension."
+  "watchTheVideo": {
+    "message": "Watch the Video"
   }
 }

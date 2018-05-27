@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+
+<!--
+	Open in Popup - More useful searching extension than Built-in features.
+	Copyright (c) 2018 Soushi Atsumi. All rights reserved.
+
+	This Source Code Form is subject to the terms of the Mozilla Public
+	License, v. 2.0. If a copy of the MPL was not distributed with this
+	file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+	This Source Code Form is "Incompatible With Secondary Licenses", as
+	defined by the Mozilla Public License, v. 2.0.
+ -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+</head>
+<body>
+	<form name="options">
+		<fieldset>
+			<legend id="protocolLegend"></legend>
+			<input type="radio" id="protocol-ask" name="protocol" value="Ask" checked="checked"><label id="askProtocolLabel"></label><br />
+			<input type="radio" id="protocol-http" name="protocol" value="Always uses http"><label id="alwaysUsesHttpLabel"></label><br />
+			<input type="radio" id="protocol-https" name="protocol" value="Always uses https"><label id="alwaysUsesHttpsLabel"></label><br />
+		</fieldset>
+		<fieldset>
+			<legend id="targetLegend"></legend>
+			<input type="radio" id="target-ask" name="target" value="Ask" checked="checked"><label id="askTargetLabel"></label><br />
+			<input type="radio" id="target-link" name="target" value="Link"><label id="alwaysOpenFromLinkLabel"></label><br />
+			<input type="radio" id="target-selection" name="target" value="Selection"><label id="alwaysOpenFromSelectionLabel"></label><br />
+			<input type="radio" id="target-view-source-link" name="target" value="View source of the link"><label id="alwaysViewSourceFromLinkLabel"></label><br />
+			<input type="radio" id="target-view-source-selection" name="target" value="View source of the selection"><label id="alwaysViewSourceFromSelectionLabel"></label>
+		</fieldset><br />
+	</form>
+	<script src="options.js"></script>
+</body>
+</html>
