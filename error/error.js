@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Open in Popup - More useful searching extension than Built-in features.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
@@ -11,11 +11,6 @@
  */
 'use strict';
 
-browser.browserAction.getPopup({}).then((value) => {
-    if (value === browser.extension.getURL('/popup/popup.html')) {
-        browser.tabs.create({
-            url: '/index.html'
-        });
-        window.close();
-    }
-});
+document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+document.title = browser.i18n.getMessage('errorHTMLTitle');
+document.getElementById('errorMessageHeading1').innerText = browser.i18n.getMessage('ThisUrlIsNotAValidUrl');
