@@ -1,50 +1,55 @@
 {
-  "background": {
-    "scripts": [ "background/background.js" ]
-  },
+	"applications": {
+		"gecko": {
+			"strict_min_version": "60.0"
+		}
+	},
 
-  "browser_action": {
-    "browser_style": true,
-    "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png",
-      "192": "icons/icon-192.png",
-      "384": "icons/icon-384.png",
-      "768": "icons/icon-768.png",
-      "1536": "icons/icon-1536.png"
-    },
-    "default_title": "Popup for opening",
-    "default_popup": "popup/popup.html"
-  },
+	"background": {
+		"scripts": [ "background/background.js" ]
+	},
 
-  "default_locale": "en",
+	"browser_action": {
+		"browser_style": true,
+		"default_icon": {
+			"48": "icons/icon-48.png",
+			"96": "icons/icon-96.png",
+			"192": "icons/icon-192.png",
+			"384": "icons/icon-384.png",
+			"768": "icons/icon-768.png",
+			"1536": "icons/icon-1536.png"
+		},
+		"default_popup": "popup/popup.html"
+	},
 
-  "description": "__MSG_extensionDescription__",
+	"default_locale": "en",
 
-  "developer": {
-    "name": "Soushi Atsumi",
-    "url": "https://pharaoh-development.blogspot.jp/"
-  },
+	"description": "__MSG_extensionDescription__",
 
-  "icons": {
-    "48": "icons/icon-48.png",
-    "96": "icons/icon-96.png",
-    "192": "icons/icon-192.png",
-    "384": "icons/icon-384.png",
-    "768": "icons/icon-768.png",
-    "1536": "icons/icon-1536.png"
-  },
+	"developer": {
+		"name": "Soushi Atsumi",
+		"url": "https://pharaoh-development.blogspot.jp/"
+	},
 
-  "manifest_version": 2,
+	"icons": {
+		"48": "icons/icon-48.png",
+		"96": "icons/icon-96.png",
+		"192": "icons/icon-192.png",
+		"384": "icons/icon-384.png",
+		"768": "icons/icon-768.png",
+		"1536": "icons/icon-1536.png"
+	},
 
-  "name": "__MSG_extensionName__",
+	"manifest_version": 2,
 
-  "options_ui": {
-    "page": "options/options.html",
-    "browser_style": true
-  },
+	"name": "__MSG_extensionName__",
 
-  "permissions": [ "contextMenus", "storage" ],
+	"options_ui": {
+		"page": "options/options.html",
+		"browser_style": true
+	},
 
-  "version": "2.0"
+	"permissions": [ "contextMenus", "storage" ],
+
+	"version": "2.1"
 }
