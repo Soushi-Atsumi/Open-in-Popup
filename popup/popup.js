@@ -11,11 +11,14 @@
  */
 'use strict';
 
+document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+document.title = browser.i18n.getMessage('popupHTMLTitle');
+
 browser.browserAction.getPopup({}).then((value) => {
-    if (value === browser.extension.getURL('/popup/popup.html')) {
-        browser.tabs.create({
-            url: '/index.html'
-        });
-        window.close();
-    }
+	if (value === browser.extension.getURL('/popup/popup.html')) {
+		browser.tabs.create({
+			url: '/index.html'
+		});
+		window.close();
+	}
 });

@@ -1,0 +1,19 @@
+﻿{
+	"httpsLinkId": "https-link",
+
+	"httpsSelectionId": "https-selection",
+
+	"viewSourceHttpsLinkId": "view-source-https-link",
+
+	"viewSourceHttpsSelectionId": "view-source-https-selection",
+
+	"httpLinkId": "http-link",
+
+	"httpSelectionId": "http-selection",
+
+	"tutorialId": "tutorial",
+
+	"viewSourceHttpLinkId": "view-source-http-link",
+
+	"viewSourceHttpSelectionId": "view-source-http-selection"
+}

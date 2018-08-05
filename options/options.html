@@ -28,12 +28,14 @@
 		<fieldset>
 			<legend id="targetLegend"></legend>
 			<input type="radio" id="target-ask" name="target" checked="checked"><label id="askTargetLabel"></label><br />
-			<input type="radio" id="target-link" name="target"><label id="alwaysOpenFromLinkLabel"></label><br />
-			<input type="radio" id="target-selection" name="target"><label id="alwaysOpenFromSelectionLabel"></label><br />
-			<input type="radio" id="target-view-source-link" name="target"><label id="alwaysViewSourceFromLinkLabel"></label><br />
-			<input type="radio" id="target-view-source-selection" name="target"><label id="alwaysViewSourceFromSelectionLabel"></label>
+			<input type="radio" id="target-specify" name="target"><label id="specifyTargetLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-link" checked disabled><label id="openFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-selection" checked disabled><label id="openFromSelectionLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-link" checked disabled><label id="viewSourceFromLinkLabel"></label><br />
+			<input type="checkbox" class="checkbox" id="target-view-source-selection" checked disabled><label id="viewSourceFromSelectionLabel"></label>
 		</fieldset><br />
 	</form>
-	<script src="options.js"></script>
+	<script src="options.js" type="module">
+	</script>
 </body>
 </html>

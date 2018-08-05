@@ -1,145 +1,149 @@
 ﻿{
-  "alwaysOpenFromLink": {
-    "message": "常にリンクを開く"
-  },
+	"alwaysUsesHttp": {
+		"message": "常にhttpを使用する"
+	},
 
-  "alwaysOpenFromSelection": {
-    "message": "常に選択文字を開く"
-  },
+	"alwaysUsesHttps": {
+		"message": "常にhttpsを使用する"
+	},
 
-  "alwaysUsesHttp": {
-    "message": "常にhttpを使用する"
-  },
+	"ask": {
+		"message": "尋ねる"
+	},
 
-  "alwaysUsesHttps": {
-    "message": "常にhttpsを使用する"
-  },
+	"errorHTMLTitle": {
+		"message": "エラー",
+		"description": "error.htmlの題名。"
+	},
 
-  "alwaysViewSourceFromLink": {
-    "message": "常にリンクのソースを開く"
-  },
+	"extensionDescription": {
+		"message": "ポップアップの中でリンクを開きます。",
+		"description": "拡張機能説明。"
+	},
 
-  "alwaysViewSourceFromSelection": {
-    "message": "常に選択文字のソースを開く"
-  },
+	"extensionName": {
+		"message": "ポップアップで開く",
+		"description": "拡張機能名。"
+	},
 
-  "ask": {
-    "message": "尋ねる"
-  },
+	"iconImageAlt": {
+		"message": "拡張機能のアイコン。",
+		"description": "この拡張機能の代替説明。"
+	},
 
-  "errorHTMLTitle": {
-    "message": "エラー",
-    "description": "error.htmlの題名。"
-  },
+	"indexHTMLCaution": {
+		"message": "注意: httpsを持つurlを選択した場合、httpを選択してもhttpsが使用されます。",
+		"description": "この拡張機能の注意。"
+	},
 
-  "extensionDescription": {
-    "message": "ポップアップの中でリンクを開きます。",
-    "description": "拡張機能説明。"
-  },
+	"indexHTMLHeading1": {
+		"message": "1.リンクを右クリックするか、文字を選択して右クリックして「ポップアップで開く」を選択する",
+		"description": "index.htmlの1番目の見出し。"
+	},
 
-  "extensionName": {
-    "message": "ポップアップで開く",
-    "description": "拡張機能名。"
-  },
+	"indexHTMLHeading2": {
+		"message": "2.開きたい形式を選択してリンクを開く(よく分からなければhttpsを使用する)",
+		"description": "index.htmlの2番目の見出し。"
+	},
 
-  "iconImageAlt": {
-    "message": "拡張機能のアイコン。",
-    "description": "この拡張機能の代替説明。"
-  },
+	"indexHTMLTitle": {
+		"message": "使い方",
+		"description": "index.htmlの題名。"
+	},
 
-  "indexHTMLCaution": {
-    "message": "注意: httpsを持つurlを選択した場合、httpを選択してもhttpsが使用されます。",
-    "description": "この拡張機能の注意。"
-  },
+	"indexHTMLTutorialVideo": {
+		"message": "https://drive.google.com/file/d/15XHIXn_6qjqAJBMaTBy_ToYAH_UiP9q2/preview",
+		"description": "使い方の動画のURL。"
+	},
 
-  "indexHTMLHeading1": {
-    "message": "1.リンクを右クリックするか、文字を選択して右クリックして「ポップアップで開く」を選択する",
-    "description": "index.htmlの1番目の見出し。"
-  },
+	"openFromLink": {
+		"message": "リンクから開く"
+	},
 
-  "indexHTMLHeading2": {
-    "message": "2.開きたい形式を選択してリンクを開く(よく分からなければhttpsを使用する)",
-    "description": "index.htmlの2番目の見出し。"
-  },
+	"openFromSelection": {
+		"message": "選択文字から開く"
+	},
 
-  "indexHTMLTitle": {
-    "message": "使い方",
-    "description": "index.htmlの題名。"
-  },
+	"openingProtocolHttpFromLink": {
+		"message": "httpを使用する(リンク)",
+		"description": "httpの指定(リンク)"
+	},
 
-  "indexHTMLTutorialVideo": {
-    "message": "https://drive.google.com/file/d/15XHIXn_6qjqAJBMaTBy_ToYAH_UiP9q2/preview",
-    "description": "使い方の動画のURL。"
-  },
+	"openingProtocolHttpFromSelection": {
+		"message": "httpを使用する(選択文字)",
+		"description": "httpの指定(選択文字)"
+	},
 
-  "openingProtocolHttpFromLink": {
-    "message": "httpを使用する(リンク)",
-    "description": "httpの指定(リンク)"
-  },
+	"openingProtocolViewSourceHttpFromLink": {
+		"message": "httpを使用する(リンクのソースを見る)",
+		"description": "httpの指定(リンクのソースを見る)"
+	},
 
-  "openingProtocolHttpFromSelection": {
-    "message": "httpを使用する(選択文字)",
-    "description": "httpの指定(選択文字)"
-  },
+	"openingProtocolViewSourceHttpFromSelection": {
+		"message": "httpを使用する(選択文字のソースを見る)",
+		"description": "httpの指定(選択文字のソースを見る)"
+	},
 
-  "openingProtocolViewSourceHttpFromLink": {
-    "message": "httpを使用する(リンクのソースを見る)",
-    "description": "httpの指定(リンクのソースを見る)"
-  },
+	"openingProtocolHttpsFromLink": {
+		"message": "httpsを使用する(リンク)",
+		"description": "httpsの指定(リンク)"
+	},
 
-  "openingProtocolViewSourceHttpFromSelection": {
-    "message": "httpを使用する(選択文字のソースを見る)",
-    "description": "httpの指定(選択文字のソースを見る)"
-  },
+	"openingProtocolHttpsFromSelection": {
+		"message": "httpsを使用する(選択文字)",
+		"description": "httpsの指定(選択文字)"
+	},
 
-  "openingProtocolHttpsFromLink": {
-    "message": "httpsを使用する(リンク)",
-    "description": "httpsの指定(リンク)"
-  },
+	"openingProtocolViewSourceHttpsFromLink": {
+		"message": "httpsを使用する(リンクのソースを見る)",
+		"description": "httpsの指定(リンクのソースを見る)"
+	},
 
-  "openingProtocolHttpsFromSelection": {
-    "message": "httpsを使用する(選択文字)",
-    "description": "httpsの指定(選択文字)"
-  },
+	"openingProtocolViewSourceHttpsFromSelection": {
+		"message": "httpsを使用する(選択文字のソースを見る)",
+		"description": "httpsの指定(選択文字のソースを見る)"
+	},
 
-  "openingProtocolViewSourceHttpsFromLink": {
-    "message": "httpsを使用する(リンクのソースを見る)",
-    "description": "httpsの指定(リンクのソースを見る)"
-  },
+	"optionsHTMLTitle": {
+		"message": "設定",
+		"description": "options.htmlの題名。"
+	},
 
-  "openingProtocolViewSourceHttpsFromSelection": {
-    "message": "httpsを使用する(選択文字のソースを見る)",
-    "description": "httpsの指定(選択文字のソースを見る)"
-  },
+	"protocol": {
+		"message": "プロトコル"
+	},
 
-  "optionsHTMLTitle": {
-    "message": "設定",
-    "description": "options.htmlの題名。"
-  },
+	"specify": {
+		"message": "指定する"
+	},
 
-  "protocol": {
-    "message": "プロトコル"
-  },
+	"target": {
+		"message": "対象"
+	},
 
-  "target": {
-    "message": "対象"
-  },
+	"thisUrlIsNotAValidUrl": {
+		"message": "このurlは無効なurlです。"
+	},
 
-  "ThisUrlIsNotAValidUrl": {
-    "message": "このurlは無効なurlです。"
-  },
+	"tutorial": {
+		"message": "使い方を開く",
+		"description": "拡張機能の使い方へのリンクを開く"
+	},
 
-  "tutorial": {
-    "message": "使い方を開く",
-    "description": "拡張機能の使い方へのリンクを開く"
-  },
+	"tutorialTitle": {
+		"message": "ポップアップで開く - 使い方",
+		"description": "使い方の題名。"
+	},
 
-  "tutorialTitle": {
-    "message": "ポップアップで開く - 使い方",
-    "description": "使い方の題名。"
-  },
+	"viewSourceFromLink": {
+		"message": "リンクのソースを開く"
+	},
 
-  "watchTheVideo": {
-    "message": "動画を観る"
-  }
+	"viewSourceFromSelection": {
+		"message": "選択文字のソースを開く"
+	},
+
+	"watchTheVideo": {
+		"message": "動画を観る"
+	}
 }
