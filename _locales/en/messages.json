@@ -1,145 +1,149 @@
-{
-  "alwaysOpenFromLink": {
-    "message": "Always open a link"
-  },
+﻿{
+	"alwaysUsesHttp": {
+		"message": "Always use http"
+	},
 
-  "alwaysOpenFromSelection": {
-    "message": "Always open a selection"
-  },
+	"alwaysUsesHttps": {
+		"message": "Always use https"
+	},
 
-  "alwaysUsesHttp": {
-    "message": "Always uses http"
-  },
+	"ask": {
+		"message": "Ask"
+	},
 
-  "alwaysUsesHttps": {
-    "message": "Always uses https"
-  },
+	"errorHTMLTitle": {
+		"message": "Error",
+		"description": "The title of error.html."
+	},
 
-  "alwaysViewSourceFromLink": {
-    "message": "Always view source of a link"
-  },
+	"extensionDescription": {
+		"message": "Open a link in the popup.",
+		"description": "Description of the extension."
+	},
 
-  "alwaysViewSourceFromSelection": {
-    "message": "Always view source of a selection"
-  },
+	"extensionName": {
+		"message": "Open in Popup",
+		"description": "Name of the extension."
+	},
 
-  "ask": {
-    "message": "Ask"
-  },
+	"iconImageAlt": {
+		"message": "The icon of this extension.",
+		"description": "The alternate description of the icon of this extention."
+	},
 
-  "errorHTMLTitle": {
-    "message": "Error",
-    "description": "The title of error.html."
-  },
+	"indexHTMLCaution": {
+		"message": "Caution: In case of selecting url which has https, https will be used even if you select http.",
+		"description": "Cautions of this extention."
+	},
 
-  "extensionDescription": {
-    "message": "Open a link in the popup.",
-    "description": "Description of the extension."
-  },
+	"indexHTMLHeading1": {
+		"message": "1.Right click a link or right click selected characters, then choose \"Open in Popup\".",
+		"description": "The first heading of index.html."
+	},
 
-  "extensionName": {
-    "message": "Open in Popup",
-    "description": "Name of the extension."
-  },
+	"indexHTMLHeading2": {
+		"message": "2.Choose the type what you want to open and open the link(choose https if you are not sure).",
+		"description": "The second heading of index.html."
+	},
 
-  "iconImageAlt": {
-    "message": "The icon of this extension.",
-    "description": "The alternate description of the icon of this extention."
-  },
+	"indexHTMLTitle": {
+		"message": "Tutorial",
+		"description": "The title of index.html."
+	},
 
-  "indexHTMLCaution": {
-    "message": "Caution: In case of selecting url which has https, https will be used even if you select http.",
-    "description": "Cautions of this extention."
-  },
+	"indexHTMLTutorialVideo": {
+		"message": "https://drive.google.com/file/d/1LCdlzMaZ64ShXpushvZh6JiefS_mex0l/preview",
+		"description": "The url of tutorial video."
+	},
 
-  "indexHTMLHeading1": {
-    "message": "1.Right click a link or right click selected characters, then choose \"Open in Popup\".",
-    "description": "The first heading of index.html."
-  },
+	"openFromLink": {
+		"message": "Open from a link"
+	},
 
-  "indexHTMLHeading2": {
-    "message": "2.Choose the type what you want to open and open the link(choose https if you are not sure).",
-    "description": "The second heading of index.html."
-  },
+	"openFromSelection": {
+		"message": "Open from a selection"
+	},
 
-  "indexHTMLTitle": {
-    "message": "Tutorial",
-    "description": "The title of index.html."
-  },
+	"openingProtocolHttpFromLink": {
+		"message": "Use http(Link)",
+		"description": "Specify http(Link)"
+	},
 
-  "indexHTMLTutorialVideo": {
-    "message": "https://drive.google.com/file/d/1LCdlzMaZ64ShXpushvZh6JiefS_mex0l/preview",
-    "description": "The url of tutorial video."
-  },
+	"openingProtocolHttpFromSelection": {
+		"message": "Use http(Selection)",
+		"description": "Specify http(Selection)"
+	},
 
-  "openingProtocolHttpFromLink": {
-    "message": "Use http(Link)",
-    "description": "Specify http(Link)"
-  },
+	"openingProtocolViewSourceHttpFromLink": {
+		"message": "Use http(View source of the link)",
+		"description": "Use http(View source of the link)"
+	},
 
-  "openingProtocolHttpFromSelection": {
-    "message": "Use http(Selection)",
-    "description": "Specify http(Selection)"
-  },
+	"openingProtocolViewSourceHttpFromSelection": {
+		"message": "Use http(View source of the selection)",
+		"description": "Specify http(View source of the selection)"
+	},
 
-  "openingProtocolViewSourceHttpFromLink": {
-    "message": "Use http(View source of the link)",
-    "description": "Use http(View source of the link)"
-  },
+	"openingProtocolHttpsFromLink": {
+		"message": "Use https(Link)",
+		"description": "Specify https(Link)"
+	},
 
-  "openingProtocolViewSourceHttpFromSelection": {
-    "message": "Use http(View source of the selection)",
-    "description": "Specify http(View source of the selection)"
-  },
+	"openingProtocolHttpsFromSelection": {
+		"message": "Use https(Selection)",
+		"description": "Specify https(Selection)"
+	},
 
-  "openingProtocolHttpsFromLink": {
-    "message": "Use https(Link)",
-    "description": "Specify https(Link)"
-  },
+	"openingProtocolViewSourceHttpsFromLink": {
+		"message": "Use https(View source of the link)",
+		"description": "Use https(View source of the link)"
+	},
 
-  "openingProtocolHttpsFromSelection": {
-    "message": "Use https(Selection)",
-    "description": "Specify https(Selection)"
-  },
+	"openingProtocolViewSourceHttpsFromSelection": {
+		"message": "Use https(View source of the selection)",
+		"description": "Specify https(View source of the selection)"
+	},
 
-  "openingProtocolViewSourceHttpsFromLink": {
-    "message": "Use https(View source of the link)",
-    "description": "Use https(View source of the link)"
-  },
+	"optionsHTMLTitle": {
+		"message": "Options",
+		"description": "The title of options.html."
+	},
 
-  "openingProtocolViewSourceHttpsFromSelection": {
-    "message": "Use https(View source of the selection)",
-    "description": "Specify https(View source of the selection)"
-  },
+	"protocol": {
+		"message": "Protocol"
+	},
 
-  "optionsHTMLTitle": {
-    "message": "Options",
-    "description": "The title of options.html."
-  },
+	"specify": {
+		"message": "Specify"
+	},
 
-  "protocol": {
-    "message": "Protocol"
-  },
+	"target": {
+		"message": "Target"
+	},
 
-  "target": {
-    "message": "Target"
-  },
+	"thisUrlIsNotAValidUrl": {
+		"message": "This url is not a valid url."
+	},
 
-  "ThisUrlIsNotAValidUrl": {
-    "message": "This url is not a valid url."
-  },
+	"tutorial": {
+		"message": "Open a tutorial",
+		"description": "Open a link of a tutorial."
+	},
 
-  "tutorial": {
-    "message": "Open a tutorial",
-    "description": "Open a link of a tutorial."
-  },
+	"tutorialTitle": {
+		"message": "Open in Popup - Tutorial",
+		"description": "The title of the tutorial."
+	},
 
-  "tutorialTitle": {
-    "message": "Open in Popup - Tutorial",
-    "description": "The title of the tutorial."
-  },
+	"viewSourceFromLink": {
+		"message": "View source of a link"
+	},
 
-  "watchTheVideo": {
-    "message": "Watch the Video"
-  }
+	"viewSourceFromSelection": {
+		"message": "View source of a selection"
+	},
+
+	"watchTheVideo": {
+		"message": "Watch the Video"
+	}
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Open in Popup - More useful searching extension than Built-in features.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
@@ -11,70 +11,88 @@
  */
 'use strict';
 
+var xmlHttpRequest = new XMLHttpRequest();
+xmlHttpRequest.open('GET', browser.extension.getURL('/_values/StorageKeys.json'), false);
+xmlHttpRequest.send();
+const storageKeys = JSON.parse(xmlHttpRequest.responseText);
+xmlHttpRequest.open('GET', browser.extension.getURL('/_values/TargetKeys.json'), false);
+xmlHttpRequest.send();
+const targetKeys = JSON.parse(xmlHttpRequest.responseText);
+xmlHttpRequest.open('GET', browser.extension.getURL('/_values/ProtocolKeys.json'), false);
+xmlHttpRequest.send();
+const protocolKeys = JSON.parse(xmlHttpRequest.responseText);
+xmlHttpRequest.open('GET', browser.extension.getURL('/_values/PopupKeys.json'), false);
+xmlHttpRequest.send();
+const popupKeys = JSON.parse(xmlHttpRequest.responseText);
+
 browser.contextMenus.create({
 	contexts: ['browser_action'],
 	icons: {
 		'1536': 'icons/icon-1536.png'
 	},
-	id: 'tutorial',
+	id: popupKeys.tutorialId,
 	title: browser.i18n.getMessage('tutorial')
 });
+
+createContextMenus();
 
 browser.contextMenus.onClicked.addListener((info, tab) => {
 	var url;
 	try {
 		switch (info.menuItemId) {
-			case 'tutorial':
+			case popupKeys.tutorialId:
 				browser.tabs.create({
 					url: '/index.html'
 				});
 				return;
-			case 'http-link':
-			case 'https-link':
-			case 'view-source-http-link':
-			case 'view-source-https-link':
+			case popupKeys.httpLinkId:
+			case popupKeys.httpsLinkId:
+			case popupKeys.viewSourceHttpLinkId:
+			case popupKeys.viewSourceHttpsLinkId:
 				url = new URL(info.linkUrl);
 				break;
-			case 'http-selection':
-			case 'https-selection':
-			case 'view-source-http-selection':
-			case 'view-source-https-selection':
+			case popupKeys.httpSelectionId:
+			case popupKeys.httpsSelectionId:
+			case popupKeys.viewSourceHttpSelectionId:
+			case popupKeys.viewSourceHttpsSelectionId:
 				url = new URL(info.selectionText);
 				break;
 		}
 
 		switch (info.menuItemId) {
-			case 'https-link':
-			case 'https-selection':
+			case popupKeys.httpsLinkId:
+			case popupKeys.httpsSelectionId:
 				url.protocol = 'https';
 				break;
-			case 'view-source-https-link':
-			case 'view-source-https-selection':
+			case popupKeys.viewSourceHttpsLinkId:
+			case popupKeys.viewSourceHttpsSelectionId:
 				url.protocol = 'https';
-			case 'view-source-http-link':
-			case 'view-source-http-selection':
+				url.href = `view-source:${url.href}`;
+				break;
+			case popupKeys.viewSourceHttpLinkId:
+			case popupKeys.viewSourceHttpSelectionId:
 				url.href = `view-source:${url.href}`;
 				break;
 		}
 	} catch (e) {
 		try {
 			switch (info.menuItemId) {
-				case 'http-selection':
+				case popupKeys.httpSelectionId:
 					url = new URL(`http://${info.selectionText}`);
 					break;
-				case 'https-selection':
+				case popupKeys.httpsSelectionId:
 					url = new URL(`https://${info.selectionText}`);
 					break;
-				case 'view-source-http-selection':
-					url = new URL(`http://${info.selectionText}`);
-					url.href = `view-source:${url.href}`;
+				case popupKeys.viewSourceHttpSelectionId:
+					url = new URL(`view-source:http://${info.selectionText}`);
 					break;
-				case 'view-source-https-selection':
-					url = new URL(`https://${info.selectionText}`);
-					url.href = `view-source:${url.href}`;
+				case popupKeys.viewSourceHttpsSelectionId:
+					url = new URL(`view-source:https://${info.selectionText}`);
 					break;
 			}
 		} catch (e) {
+			console.error(url);
+			console.error(e);
 			url = new URL(browser.extension.getURL('error/error.html'));
 		}
 	}
@@ -82,93 +100,105 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 	browser.browserAction.setPopup({
 		popup: url.href
 	});
+
 	browser.browserAction.openPopup();
 });
 
-browser.contextMenus.onShown.addListener(function (info, tab) {
+async function createContextMenus() {
 	browser.contextMenus.removeAll();
-	browser.storage.local.get(['protocol', 'target']).then((item) => {
-		if (Object.keys(item).length === 0) {
-			createContextMenus('protocol-ask', 'target-ask');
-		} else {
-			createContextMenus(item['protocol'], item['target']);
-		}
 
-		browser.contextMenus.refresh();
+	var protocol;
+	var target;
+	var linkIsEnabled;
+	var selectionIsEnabled;
+	var viewSourceLinkIsEnabled;
+	var viewSourceSelectionIsEnabled;
+
+	await browser.storage.local.get().then((item) => {
+		protocol = item[storageKeys.protocol] === undefined ? protocolKeys.ask : item[storageKeys.protocol];
+		target = item[storageKeys.target] === undefined ? targetKeys.ask : item[storageKeys.target];
+		linkIsEnabled = target === targetKeys.ask || item[storageKeys.link] === undefined ? true : item[storageKeys.link];
+		selectionIsEnabled = target === targetKeys.ask || item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
+		viewSourceLinkIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
+		viewSourceSelectionIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
 	});
-});
 
-function createContextMenus(protocol, target) {
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
 		icons: {
 			'1536': 'icons/icon-1536.png'
 		},
-		id: 'tutorial',
+		id: popupKeys.tutorialId,
 		title: browser.i18n.getMessage('tutorial')
 	});
 
-	if (protocol === 'protocol-ask' || protocol === 'protocol-https') {
-		if (target === 'target-ask' || target === 'target-link') {
+	if (protocol !== protocolKeys.http) {
+		if (linkIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['link'],
-				id: 'https-link',
-				title: browser.i18n.getMessage('openingProtocolHttpsFromLink')
+				id: popupKeys.httpsLinkId,
+				title: browser.i18n.getMessage("openingProtocolHttpsFromLink")
 			});
 		}
 
-		if (target === 'target-ask' || target === 'target-selection') {
+		if (selectionIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['selection'],
-				id: 'https-selection',
-				title: browser.i18n.getMessage('openingProtocolHttpsFromSelection')
+				id: popupKeys.httpsSelectionId,
+				title: browser.i18n.getMessage("openingProtocolHttpsFromSelection")
 			});
 		}
-		if (target === 'target-ask' || target === 'target-view-source-link') {
+
+		if (viewSourceLinkIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['link'],
-				id: 'view-source-https-link',
+				id: popupKeys.viewSourceHttpsLinkId,
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromLink')
 			});
 		}
-		if (target === 'target-ask' || target === 'target-view-source-selection') {
+
+		if (viewSourceSelectionIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['selection'],
-				id: 'view-source-https-selection',
+				id: popupKeys.viewSourceHttpsSelectionId,
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromSelection')
 			});
 		}
 	}
 
-	if (protocol === 'protocol-ask' || protocol === 'protocol-http') {
-		if (target === 'target-ask' || target === 'target-link') {
+	if (protocol !== protocolKeys.https) {
+		if (linkIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['link'],
-				id: 'http-link',
-				title: browser.i18n.getMessage('openingProtocolHttpFromLink')
+				id: popupKeys.httpLinkId,
+				title: browser.i18n.getMessage("openingProtocolHttpFromLink")
 			});
 		}
 
-		if (target === 'target-ask' || target === 'target-selection') {
+		if (selectionIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['selection'],
-				id: 'http-selection',
-				title: browser.i18n.getMessage('openingProtocolHttpFromSelection')
+				id: popupKeys.httpSelectionId,
+				title: browser.i18n.getMessage("openingProtocolHttpFromSelection")
 			});
 		}
-		if (target === 'target-ask' || target === 'target-view-source-link') {
+
+		if (viewSourceLinkIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['link'],
-				id: 'view-source-http-link',
+				id: popupKeys.viewSourceHttpLinkId,
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromLink')
 			});
 		}
-		if (target === 'target-ask' || target === 'target-view-source-selection') {
+
+		if (viewSourceSelectionIsEnabled) {
 			browser.contextMenus.create({
 				contexts: ['selection'],
-				id: 'view-source-http-selection',
+				id: popupKeys.viewSourceHttpSelectionId,
 				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromSelection')
 			});
 		}
 	}
+
+	browser.contextMenus.refresh();
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Open in Popup - More useful searching extension than Built-in features.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
