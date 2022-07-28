@@ -1,5 +1,5 @@
 ﻿/*
- * Open in Popup - More useful searching extension than Built-in features.
+ * Open in Popup - Very simple and useful extension. You can open a link in the popup.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,39 +11,23 @@
  */
 'use strict';
 
-document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('indexHTMLTitle');
-document.getElementById('tutorialTitleLabel').innerText = browser.i18n.getMessage('tutorialTitle');
-document.getElementById('icon').alt = browser.i18n.getMessage('iconImageAlt');
-document.getElementById('heading1').innerText = browser.i18n.getMessage('indexHTMLHeading1');
-document.getElementById('heading2').innerText = browser.i18n.getMessage('indexHTMLHeading2');
+main();
 
-var tutorialVideoLabel = document.getElementById('tutorialVideoDescriptionLabel');
-tutorialVideoLabel.innerText = browser.i18n.getMessage('watchTheVideo');
-var tutorialVideoDivision = document.getElementById('tutorialVideoDivision');
-var closeTutorialVideoButton = document.getElementById('closeTutorialVideoButton');
-var tutorialVideoIframe = document.getElementById('tutorialVideoIframe');
-
-document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('indexHTMLCaution');
-
-tutorialVideoDivision.addEventListener('click', () => {
-	tutorialVideoOnClose();
-});
-
-closeTutorialVideoButton.addEventListener('click', () => {
-	tutorialVideoOnClose();
-});
-
-tutorialVideoLabel.addEventListener('click', () => {
-	tutorialVideoOnShow();
-});
-
-function tutorialVideoOnShow() {
-	tutorialVideoDivision.style.display = 'block';
-	tutorialVideoIframe.src = browser.i18n.getMessage('indexHTMLTutorialVideo');
+function main() {
+	initDocuments();
 }
 
-function tutorialVideoOnClose() {
-	tutorialVideoDivision.style.display = 'none';
-	tutorialVideoIframe.src = "";
+function initDocuments() {
+	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+	document.title = browser.i18n.getMessage('indexHTMLTitle');
+	document.getElementById('tutorialTitleLabel').innerText = browser.i18n.getMessage('tutorialTitle');
+	document.getElementById('icon').alt = browser.i18n.getMessage('iconImageAlt');
+	document.getElementById('heading1').innerText = browser.i18n.getMessage('indexHTMLHeading1');
+	document.getElementById('heading2').innerText = browser.i18n.getMessage('indexHTMLHeading2');
+
+	const tutorialVideoAnchor = document.getElementById('tutorialVideoAnchor');
+	tutorialVideoAnchor.innerText = browser.i18n.getMessage('watchTheVideo');
+	tutorialVideoAnchor.href = browser.i18n.getMessage('indexHTMLTutorialVideo');
+	document.getElementById('othersDivision').innerText = browser.i18n.getMessage('indexHTMLOthers');
+	document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('indexHTMLCaution');
 }

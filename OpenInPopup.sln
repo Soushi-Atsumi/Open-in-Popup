@@ -1,11 +1,93 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F39FC63-4BE5-47F1-B917-6127DAA29CA1}"
+	ProjectSection(SolutionItems) = preProject
+		index.css = index.css
+		index.html = index.html
+		index.js = index.js
+		LICENSE.txt = LICENSE.txt
+		manifest.json = manifest.json
+		README.md = README.md
+		README_ja.md = README_ja.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_locales", "_locales", "{73FA7DBC-005B-4C1D-A2F8-B8EBEEFFDAF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "en", "en", "{206467DC-FBA0-4784-A872-78C0B73FD6B1}"
+	ProjectSection(SolutionItems) = preProject
+		_locales\en\messages.json = _locales\en\messages.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ja", "ja", "{7F4EDD11-2B70-4157-963A-2D5D844CB17C}"
+	ProjectSection(SolutionItems) = preProject
+		_locales\ja\messages.json = _locales\ja\messages.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_values", "_values", "{E2E43A01-E42E-45A2-9389-5BE396D3516C}"
+	ProjectSection(SolutionItems) = preProject
+		_values\MediaTypeKeys.json = _values\MediaTypeKeys.json
+		_values\PlacementKeys.json = _values\PlacementKeys.json
+		_values\ProtocolKeys.json = _values\ProtocolKeys.json
+		_values\StorageKeys.json = _values\StorageKeys.json
+		_values\TargetKeys.json = _values\TargetKeys.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "background", "background", "{FA476EEF-BD39-4EB1-B9A7-98679221F055}"
+	ProjectSection(SolutionItems) = preProject
+		background\background.js = background\background.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "error", "error", "{536C8297-3D34-4BB4-A04A-8652080794EF}"
+	ProjectSection(SolutionItems) = preProject
+		error\error.html = error\error.html
+		error\error.js = error\error.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "icons", "icons", "{E4BBDFE2-380F-4F73-8D20-EE964A41D474}"
+	ProjectSection(SolutionItems) = preProject
+		icons\icon-1536.png = icons\icon-1536.png
+		icons\icon-192.png = icons\icon-192.png
+		icons\icon-24.png = icons\icon-24.png
+		icons\icon-384.png = icons\icon-384.png
+		icons\icon-48.png = icons\icon-48.png
+		icons\icon-768.png = icons\icon-768.png
+		icons\icon-96.png = icons\icon-96.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "options", "options", "{D8A13384-B570-4ED1-ACFF-78176E4B156D}"
+	ProjectSection(SolutionItems) = preProject
+		options\options.css = options\options.css
+		options\options.html = options\options.html
+		options\options.js = options\options.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "popup", "popup", "{3F478DA5-DE6C-4BC3-9012-4297A1E73A32}"
+	ProjectSection(SolutionItems) = preProject
+		popup\popup.html = popup\popup.html
+		popup\popup.js = popup\popup.js
+		popup\popup_dummy.html = popup\popup_dummy.html
+		popup\popup_dummy.js = popup\popup_dummy.js
+		popup\popup_media.html = popup\popup_media.html
+		popup\popup_media.js = popup\popup_media.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73FA7DBC-005B-4C1D-A2F8-B8EBEEFFDAF7} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{206467DC-FBA0-4784-A872-78C0B73FD6B1} = {73FA7DBC-005B-4C1D-A2F8-B8EBEEFFDAF7}
+		{7F4EDD11-2B70-4157-963A-2D5D844CB17C} = {73FA7DBC-005B-4C1D-A2F8-B8EBEEFFDAF7}
+		{E2E43A01-E42E-45A2-9389-5BE396D3516C} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{FA476EEF-BD39-4EB1-B9A7-98679221F055} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{536C8297-3D34-4BB4-A04A-8652080794EF} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{E4BBDFE2-380F-4F73-8D20-EE964A41D474} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{D8A13384-B570-4ED1-ACFF-78176E4B156D} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
+		{3F478DA5-DE6C-4BC3-9012-4297A1E73A32} = {3F39FC63-4BE5-47F1-B917-6127DAA29CA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F89717F8-1853-4591-818A-06CF84DD1548}

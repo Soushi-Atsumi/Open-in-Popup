@@ -1,5 +1,5 @@
 ﻿/*
- * Open in Popup - More useful searching extension than Built-in features.
+ * Open in Popup - Very simple and useful extension. You can open a link in the popup.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,194 +11,442 @@
  */
 'use strict';
 
-var xmlHttpRequest = new XMLHttpRequest();
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/StorageKeys.json'), false);
-xmlHttpRequest.send();
-const storageKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/TargetKeys.json'), false);
-xmlHttpRequest.send();
-const targetKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/ProtocolKeys.json'), false);
-xmlHttpRequest.send();
-const protocolKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/PopupKeys.json'), false);
-xmlHttpRequest.send();
-const popupKeys = JSON.parse(xmlHttpRequest.responseText);
+var mediaTypeKeys;
+var placementKeys;
+var protocolKeys;
+var storageKeys;
+var targetKeys;
+var currentSettings;
 
-browser.contextMenus.create({
-	contexts: ['browser_action'],
-	icons: {
-		'1536': 'icons/icon-1536.png'
-	},
-	id: popupKeys.tutorialId,
-	title: browser.i18n.getMessage('tutorial')
-});
+var currentTabId;
+var currentWindowId;
 
-createContextMenus();
+const tutorialId = 'tutorial';
+const httpsAudioId = 'https-audio';
+const httpsBookmarkId = 'https-Bookmark';
+const httpsImageId = 'https-image';
+const httpsLinkId = 'https-link';
+const httpsPageId = 'https-page';
+const httpsSelectionId = 'https-selection';
+const httpsVideoId = 'https-video';
+const viewSourceHttpsBookmarkId = 'view-source-https-Bookmark';
+const viewSourceHttpsLinkId = 'view-source-https-link';
+const viewSourceHttpsPageId = 'view-source-https-page';
+const viewSourceHttpsSelectionId = 'view-source-https-selection';
+const httpAudioId = 'http-audio';
+const httpBookmarkId = 'http-Bookmark';
+const httpImageId = 'http-image';
+const httpLinkId = 'http-link';
+const httpPageId = 'http-page';
+const httpSelectionId = 'http-selection';
+const httpVideoId = 'http-video';
+const viewSourceHttpBookmarkId = 'view-source-http-Bookmark';
+const viewSourceHttpLinkId = 'view-source-http-link';
+const viewSourceHttpPageId = 'view-source-http-page';
+const viewSourceHttpSelectionId = 'view-source-http-selection';
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
-	var url;
-	try {
-		switch (info.menuItemId) {
-			case popupKeys.tutorialId:
-				browser.tabs.create({
-					url: '/index.html'
-				});
-				return;
-			case popupKeys.httpLinkId:
-			case popupKeys.httpsLinkId:
-			case popupKeys.viewSourceHttpLinkId:
-			case popupKeys.viewSourceHttpsLinkId:
-				url = new URL(info.linkUrl);
-				break;
-			case popupKeys.httpSelectionId:
-			case popupKeys.httpsSelectionId:
-			case popupKeys.viewSourceHttpSelectionId:
-			case popupKeys.viewSourceHttpsSelectionId:
-				url = new URL(info.selectionText);
-				break;
-		}
+main();
 
-		switch (info.menuItemId) {
-			case popupKeys.httpsLinkId:
-			case popupKeys.httpsSelectionId:
-				url.protocol = 'https';
-				break;
-			case popupKeys.viewSourceHttpsLinkId:
-			case popupKeys.viewSourceHttpsSelectionId:
-				url.protocol = 'https';
-				url.href = `view-source:${url.href}`;
-				break;
-			case popupKeys.viewSourceHttpLinkId:
-			case popupKeys.viewSourceHttpSelectionId:
-				url.href = `view-source:${url.href}`;
-				break;
-		}
-	} catch (e) {
-		try {
-			switch (info.menuItemId) {
-				case popupKeys.httpSelectionId:
-					url = new URL(`http://${info.selectionText}`);
-					break;
-				case popupKeys.httpsSelectionId:
-					url = new URL(`https://${info.selectionText}`);
-					break;
-				case popupKeys.viewSourceHttpSelectionId:
-					url = new URL(`view-source:http://${info.selectionText}`);
-					break;
-				case popupKeys.viewSourceHttpsSelectionId:
-					url = new URL(`view-source:https://${info.selectionText}`);
-					break;
-			}
-		} catch (e) {
-			console.error(url);
-			console.error(e);
-			url = new URL(browser.extension.getURL('error/error.html'));
-		}
-	}
-
-	browser.browserAction.setPopup({
-		popup: url.href
+async function main() {
+	await readKeys();
+	browser.contextMenus.onClicked.addListener(openInThePopup);
+	browser.contextMenus.onShown.addListener(async () => {
+		currentTabId = currentSettings[storageKeys.placement] === placementKeys.tab ? (await browser.tabs.query({ active: true, currentWindow: true }))[0].id : undefined;
+		currentWindowId = currentSettings[storageKeys.placement] === placementKeys.window ? (await browser.tabs.query({ active: true, currentWindow: true }))[0].windowId : undefined;
 	});
-
-	browser.browserAction.openPopup();
-});
+	browser.permissions.onAdded.addListener(updateContextMenus);
+	browser.permissions.onRemoved.addListener(updateContextMenus);
+	browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+		if (message.action === 'refresh') {
+			browser.storage.local.get().then((item) => {
+				currentSettings = item;
+				return updateContextMenus();
+			});
+		}
+	});
+	browser.storage.local.get().then((item) => {
+		currentSettings = item;
+		return createContextMenus();
+	});
+}
 
 async function createContextMenus() {
-	browser.contextMenus.removeAll();
-
-	var protocol;
-	var target;
-	var linkIsEnabled;
-	var selectionIsEnabled;
-	var viewSourceLinkIsEnabled;
-	var viewSourceSelectionIsEnabled;
-
-	await browser.storage.local.get().then((item) => {
-		protocol = item[storageKeys.protocol] === undefined ? protocolKeys.ask : item[storageKeys.protocol];
-		target = item[storageKeys.target] === undefined ? targetKeys.ask : item[storageKeys.target];
-		linkIsEnabled = target === targetKeys.ask || item[storageKeys.link] === undefined ? true : item[storageKeys.link];
-		selectionIsEnabled = target === targetKeys.ask || item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
-		viewSourceLinkIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
-		viewSourceSelectionIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
-	});
+	const contextMenusObject = await createContextMenusObject();
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
 		icons: {
-			'1536': 'icons/icon-1536.png'
+			"48": "icons/icon-48.png",
+			"96": "icons/icon-96.png",
+			"192": "icons/icon-192.png",
+			"384": "icons/icon-384.png",
+			"768": "icons/icon-768.png",
+			"1536": "icons/icon-1536.png"
 		},
-		id: popupKeys.tutorialId,
+		id: tutorialId,
 		title: browser.i18n.getMessage('tutorial')
 	});
 
-	if (protocol !== protocolKeys.http) {
-		if (linkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.httpsLinkId,
-				title: browser.i18n.getMessage("openingProtocolHttpsFromLink")
-			});
+	for (let i in contextMenusObject) {
+		for (let j in contextMenusObject[i]) {
+			browser.contextMenus.create(contextMenusObject[i][j]);
+		}
+	}
+}
+
+async function createContextMenusObject() {
+	const protocol = currentSettings[storageKeys.protocol] === undefined ? protocolKeys.ask : currentSettings[storageKeys.protocol];
+	const target = currentSettings[storageKeys.target] === undefined ? targetKeys.ask : currentSettings[storageKeys.target];
+
+	let hasBookmarkPermission = false;
+	await browser.permissions.getAll().then(result => {
+		if (result.permissions.includes('bookmarks')) {
+			hasBookmarkPermission = true;
+		}
+	});
+
+	const bookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.bookmark] === undefined ? true : currentSettings[storageKeys.bookmark]);
+	const linkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
+	const pageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
+	const selectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
+	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targetKeys.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
+	const viewSourceLinkIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
+	const viewSourcePageIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
+	const viewSourceSelectionIsEnabled = target === targetKeys.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
+
+	const contextMenusObject = {
+		http: {},
+		https: {}
+	};
+
+	const useHttpMessage = browser.i18n.getMessage('useHttp');
+	const useHttpsMessage = browser.i18n.getMessage('useHttps');
+	const viewSourceMessage = browser.i18n.getMessage('viewSource');
+	const viewSourceHttpMessage = `(${viewSourceMessage})(${useHttpMessage})`;
+	const viewSourceHttpsMessage = `(${viewSourceMessage})(${useHttpsMessage})`;
+
+	// http
+	contextMenusObject.http.audio = {
+		contexts: ['audio'],
+		id: httpAudioId,
+		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https
+	};
+
+	contextMenusObject.http.bookmark = {
+		contexts: ['bookmark'],
+		id: httpBookmarkId,
+		title: `${browser.i18n.getMessage('openThisBookmark')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https && bookmarkIsEnabled
+	};
+
+	contextMenusObject.http.image = {
+		contexts: ['image'],
+		id: httpImageId,
+		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https
+	};
+
+	contextMenusObject.http.link = {
+		contexts: ['link'],
+		id: httpLinkId,
+		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https && linkIsEnabled
+	};
+
+	contextMenusObject.http.page = {
+		contexts: ['page', 'tab'],
+		id: httpPageId,
+		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https && pageIsEnabled
+	};
+
+	contextMenusObject.http.selection = {
+		contexts: ['selection'],
+		id: httpSelectionId,
+		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https && selectionIsEnabled
+	};
+
+	contextMenusObject.http.video = {
+		contexts: ['video'],
+		id: httpVideoId,
+		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpMessage})`,
+		visible: protocol !== protocolKeys.https
+	};
+
+	contextMenusObject.http.viewSourceFromBookmark = {
+		contexts: ['bookmark'],
+		id: viewSourceHttpBookmarkId,
+		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocolKeys.https && viewSourceFromBookmarkIsEnabled
+	};
+
+	contextMenusObject.http.viewSourceLink = {
+		contexts: ['link'],
+		id: viewSourceHttpLinkId,
+		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocolKeys.https && viewSourceLinkIsEnabled
+	};
+
+	contextMenusObject.http.viewSourcePage = {
+		contexts: ['page', 'tab'],
+		id: viewSourceHttpPageId,
+		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocolKeys.https && viewSourcePageIsEnabled
+	};
+
+	contextMenusObject.http.viewSourceSelection = {
+		contexts: ['selection'],
+		id: viewSourceHttpSelectionId,
+		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocolKeys.https && viewSourceSelectionIsEnabled
+	};
+
+	// https
+	contextMenusObject.https.audio = {
+		contexts: ['audio'],
+		id: httpsAudioId,
+		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http
+	};
+
+	contextMenusObject.https.bookmark = {
+		contexts: ['bookmark'],
+		id: httpsBookmarkId,
+		title: `${browser.i18n.getMessage('openThisBookmark')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http && bookmarkIsEnabled
+	};
+
+	contextMenusObject.https.image = {
+		contexts: ['image'],
+		id: httpsImageId,
+		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http
+	};
+
+	contextMenusObject.https.link = {
+		contexts: ['link'],
+		id: httpsLinkId,
+		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http && linkIsEnabled
+	};
+
+	contextMenusObject.https.page = {
+		contexts: ['page', 'tab'],
+		id: httpsPageId,
+		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http && pageIsEnabled
+	};
+
+	contextMenusObject.https.selection = {
+		contexts: ['selection'],
+		id: httpsSelectionId,
+		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http && selectionIsEnabled
+	};
+
+	contextMenusObject.https.video = {
+		contexts: ['video'],
+		id: httpsVideoId,
+		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpsMessage})`,
+		visible: protocol !== protocolKeys.http
+	};
+
+	contextMenusObject.https.viewSourceFromBookmark = {
+		contexts: ['bookmark'],
+		id: viewSourceHttpsBookmarkId,
+		title: `${browser.i18n.getMessage('openThisBookmark')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocolKeys.http && viewSourceFromBookmarkIsEnabled
+	};
+
+	contextMenusObject.https.viewSourceLink = {
+		contexts: ['link'],
+		id: viewSourceHttpsLinkId,
+		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocolKeys.http && viewSourceLinkIsEnabled
+	};
+
+	contextMenusObject.https.viewSourcePage = {
+		contexts: ['page', 'tab'],
+		id: viewSourceHttpsPageId,
+		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocolKeys.http && viewSourcePageIsEnabled
+	};
+
+	contextMenusObject.https.viewSourceSelection = {
+		contexts: ['selection'],
+		id: viewSourceHttpsSelectionId,
+		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocolKeys.http && viewSourceSelectionIsEnabled
+	};
+
+	return contextMenusObject;
+}
+
+async function openInThePopup(info, tab) {
+	let url;
+
+	try {
+		setPopupDummy(currentTabId, currentWindowId);
+		browser.browserAction.openPopup();
+
+		switch (info.menuItemId) {
+			case tutorialId:
+				url = new URL(browser.runtime.getURL('/index.html'));
+				break;
+			case httpLinkId:
+			case httpsLinkId:
+			case viewSourceHttpLinkId:
+			case viewSourceHttpsLinkId:
+				url = new URL(info.linkUrl);
+				break;
+			case httpSelectionId:
+			case httpsSelectionId:
+			case viewSourceHttpSelectionId:
+			case viewSourceHttpsSelectionId:
+				url = new URL(info.selectionText);
+				break;
+			case httpAudioId:
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.audio}=${encodeURIComponent(info.srcUrl)}`));
+				break;
+			case httpImageId:
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.image}=${encodeURIComponent(info.srcUrl)}`));
+				break;
+			case httpVideoId:
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.video}=${encodeURIComponent(info.srcUrl)}`));
+				break;
+			case httpsAudioId:
+			case httpsImageId:
+			case httpsVideoId:
+				url = new URL(info.srcUrl);
+				break;
+			case httpPageId:
+			case httpsPageId:
+			case viewSourceHttpPageId:
+			case viewSourceHttpsPageId:
+				url = new URL(tab.url);
+				break;
+			case httpBookmarkId:
+			case httpsBookmarkId:
+			case viewSourceHttpBookmarkId:
+			case viewSourceHttpsBookmarkId:
+				await browser.bookmarks.get(info.bookmarkId).then(bookmarks => {
+					if (bookmarks[0].type === browser.bookmarks.BookmarkTreeNodeType.BOOKMARK) {
+						url = new URL(bookmarks[0].url);
+					} else {
+						url = new URL(browser.runtime.getURL('error/error.html'));
+					}
+				});
+				break;
 		}
 
-		if (selectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.httpsSelectionId,
-				title: browser.i18n.getMessage("openingProtocolHttpsFromSelection")
-			});
+		switch (info.menuItemId) {
+			case httpsAudioId:
+				url.protocol = 'https';
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.audio}=${encodeURIComponent(url.href)}`));
+				break;
+			case httpsImageId:
+				url.protocol = 'https';
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.image}=${encodeURIComponent(url.href)}`));
+				break;
+			case httpsVideoId:
+				url.protocol = 'https';
+				url = new URL(browser.runtime.getURL(`/popup/popup_media.html?${mediaTypeKeys.video}=${encodeURIComponent(url.href)}`));
+				break;
+			case httpsBookmarkId:
+			case httpsLinkId:
+			case httpsPageId:
+			case httpsSelectionId:
+				url.protocol = 'https';
+				break;
+			case viewSourceHttpsBookmarkId:
+			case viewSourceHttpsLinkId:
+			case viewSourceHttpsPageId:
+			case viewSourceHttpsSelectionId:
+				url.href = url.href.replace(/^view-source:/, '');
+				url.protocol = 'https';
+				url.href = `view-source:${url.href}`;
+				break;
+			case viewSourceHttpBookmarkId:
+			case viewSourceHttpLinkId:
+			case viewSourceHttpPageId:
+			case viewSourceHttpSelectionId:
+				if (!url.href.startsWith('view-source:')) {
+					url.href = `view-source:${url.href}`;
+				}
+				break;
 		}
-
-		if (viewSourceLinkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.viewSourceHttpsLinkId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromLink')
-			});
-		}
-
-		if (viewSourceSelectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.viewSourceHttpsSelectionId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromSelection')
-			});
+	} catch (e) {
+		console.error(e);
+		try {
+			switch (info.menuItemId) {
+				case httpSelectionId:
+					url = new URL(`http://${info.selectionText}`);
+					break;
+				case httpsSelectionId:
+					url = new URL(`https://${info.selectionText}`);
+					break;
+				case viewSourceHttpSelectionId:
+					url = new URL(`view-source:http://${info.selectionText}`);
+					break;
+				case viewSourceHttpsSelectionId:
+					url = new URL(`view-source:https://${info.selectionText}`);
+					break;
+				default:
+					url = new URL(browser.runtime.getURL('error/error.html'));
+					break;
+			}
+		} catch (e) {
+			console.error(e);
+			url = new URL(browser.runtime.getURL('error/error.html'));
 		}
 	}
 
-	if (protocol !== protocolKeys.https) {
-		if (linkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.httpLinkId,
-				title: browser.i18n.getMessage("openingProtocolHttpFromLink")
-			});
-		}
+	browser.browserAction.setPopup({
+		popup: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href,
+		tabId: currentTabId,
+		windowId: currentWindowId
+	});
+}
 
-		if (selectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.httpSelectionId,
-				title: browser.i18n.getMessage("openingProtocolHttpFromSelection")
-			});
-		}
+async function readKeys() {
+	const keyFiles = ['MediaTypeKeys.json', 'PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+		return Promise.all(values.map(value => value.text()));
+	}).then(values => {
+		mediaTypeKeys = JSON.parse(values[0]);
+		placementKeys = JSON.parse(values[1]);
+		protocolKeys = JSON.parse(values[2]);
+		storageKeys = JSON.parse(values[3]);
+		targetKeys = JSON.parse(values[4]);
+	});
+}
 
-		if (viewSourceLinkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.viewSourceHttpLinkId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromLink')
-			});
-		}
+async function setPopupDummy(tabId, windowId) {
+	let popup;
 
-		if (viewSourceSelectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.viewSourceHttpSelectionId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromSelection')
-			});
-		}
+	if (tabId === undefined && windowId === undefined) {
+		popup = `popup/popup_dummy.html`;
+	} else if (tabId === undefined && windowId !== undefined) {
+		popup = `popup/popup_dummy.html?windowId=${windowId}`;
+	} else if (tabId !== undefined && windowId === undefined) {
+		popup = `popup/popup_dummy.html?tabId=${tabId}`;
 	}
 
-	browser.contextMenus.refresh();
+	return browser.browserAction.setPopup({
+		popup: browser.runtime.getURL(popup),
+		tabId: tabId,
+		windowId: windowId
+	});
+}
+
+async function updateContextMenus() {
+	const contextMenusObject = await createContextMenusObject();
+
+	for (let i in contextMenusObject) {
+		for (let j in contextMenusObject[i]) {
+			browser.contextMenus.update(contextMenusObject[i][j].id, { visible: contextMenusObject[i][j].visible });
+		}
+	}
 }

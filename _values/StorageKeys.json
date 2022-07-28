@@ -1,7 +1,15 @@
 ﻿{
 	"ask": "Ask",
 
+	"initialLocation": "InitialLocation",
+
+	"bookmark": "Bookmark",
+
 	"link": "Link",
+
+	"page": "Page",
+
+	"placement": "Placement",
 
 	"protocol": "Protocol",
 
@@ -11,7 +19,11 @@
 
 	"target": "Target",
 
+	"viewSourceFromBookmark": "ViewSourceFromBookmark",
+
 	"viewSourceLink": "ViewSourceLink",
+
+	"viewSourcePage": "ViewSourcePage",
 
 	"viewSourceSelection": "ViewSourceSelection"
 }

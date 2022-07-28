@@ -1,5 +1,5 @@
 ﻿/*
- * Open in Popup - More useful searching extension than Built-in features.
+ * Open in Popup - Very simple and useful extension. You can open a link in the popup.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,14 +11,19 @@
  */
 'use strict';
 
-document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('popupHTMLTitle');
+main();
 
-browser.browserAction.getPopup({}).then((value) => {
-	if (value === browser.extension.getURL('/popup/popup.html')) {
-		browser.tabs.create({
-			url: '/index.html'
-		});
-		window.close();
-	}
-});
+function main() {
+	initDocuments();
+	setLocation();
+}
+
+function initDocuments() {
+	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+	document.title = browser.i18n.getMessage('popupHTMLTitle');
+}
+
+async function setLocation() {
+	const storageKeys = JSON.parse(await (await fetch('/_values/StorageKeys.json')).text());
+	window.location = (await browser.storage.local.get(storageKeys.initialLocation))[storageKeys.initialLocation] ?? '/index.html';
+}
