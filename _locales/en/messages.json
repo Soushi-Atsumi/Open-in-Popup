@@ -1,4 +1,12 @@
 ﻿{
+	"additionalPermissions": {
+		"message": "Additional permissions"
+	},
+
+	"all": {
+		"message": "All"
+	},
+
 	"alwaysUsesHttp": {
 		"message": "Always use http"
 	},
@@ -9,6 +17,10 @@
 
 	"ask": {
 		"message": "Ask"
+	},
+
+	"bookmarks": {
+		"message": "bookmarks"
 	},
 
 	"errorHTMLTitle": {
@@ -46,6 +58,11 @@
 		"description": "The second heading of index.html."
 	},
 
+	"indexHTMLOthers": {
+		"message": "Ex: You can open audio, an image, a video, a bookmark and a tab in the popup.",
+		"description": "others of index.html"
+	},
+
 	"indexHTMLTitle": {
 		"message": "Tutorial",
 		"description": "The title of index.html."
@@ -56,57 +73,94 @@
 		"description": "The url of tutorial video."
 	},
 
+	"initialLocation": {
+		"message": "Initial Location"
+	},
+
+	"initialLocationDescription": {
+		"message": "Press Enter to save. It returns to the initial state by leaving it a blank."
+	},
+
+	"openFromBookmark": {
+		"message": "Open from a bookmark"
+	},
+
 	"openFromLink": {
 		"message": "Open from a link"
+	},
+
+	"openFromPage": {
+		"message": "Open from a page"
 	},
 
 	"openFromSelection": {
 		"message": "Open from a selection"
 	},
 
-	"openingProtocolHttpFromLink": {
-		"message": "Use http(Link)",
-		"description": "Specify http(Link)"
+	"openThisAudio": {
+		"message": "Open this audio"
 	},
 
-	"openingProtocolHttpFromSelection": {
-		"message": "Use http(Selection)",
-		"description": "Specify http(Selection)"
+	"openThisBookmark": {
+		"message": "Open this bookmark"
 	},
 
-	"openingProtocolViewSourceHttpFromLink": {
-		"message": "Use http(View source of the link)",
-		"description": "Use http(View source of the link)"
+	"openThisImage": {
+		"message": "Open this image"
 	},
 
-	"openingProtocolViewSourceHttpFromSelection": {
-		"message": "Use http(View source of the selection)",
-		"description": "Specify http(View source of the selection)"
+	"openThisLink": {
+		"message": "Open this link"
 	},
 
-	"openingProtocolHttpsFromLink": {
-		"message": "Use https(Link)",
-		"description": "Specify https(Link)"
+	"openThisPage": {
+		"message": "Open this page"
 	},
 
-	"openingProtocolHttpsFromSelection": {
-		"message": "Use https(Selection)",
-		"description": "Specify https(Selection)"
+	"openThisSelection": {
+		"message": "Open this selection"
 	},
 
-	"openingProtocolViewSourceHttpsFromLink": {
-		"message": "Use https(View source of the link)",
-		"description": "Use https(View source of the link)"
-	},
-
-	"openingProtocolViewSourceHttpsFromSelection": {
-		"message": "Use https(View source of the selection)",
-		"description": "Specify https(View source of the selection)"
+	"openThisVideo": {
+		"message": "Open this video"
 	},
 
 	"optionsHTMLTitle": {
 		"message": "Options",
 		"description": "The title of options.html."
+	},
+
+	"placement": {
+		"message": "Placement"
+	},
+
+	"placementAllCaution": {
+		"message": "'All' cannot overwrite 'Tab' or 'Window'. 'All' can be overwritten by 'Tab' or 'Window'."
+	},
+
+	"placementAllDescription": {
+		"message": "Overwrite all popups."
+	},
+
+	"placementTabCaution": {
+		"message": "'Tab' cannot be overwritten by a popup which is not 'Tab'."
+	},
+
+	"placementTabDescription": {
+		"message": "Overwrite a popup at the current tab."
+	},
+
+	"placementWindowCaution": {
+		"message": "'Window' cannot overwrite 'Tab'. 'Window' can be overwritten by 'Tab' or 'Window'."
+	},
+
+	"placementWindowDescription": {
+		"message": "Overwrite popups at the current window."
+	},
+
+	"popupHTMLTitle": {
+		"message": "Open in Popup",
+		"description": "The title of popup.html"
 	},
 
 	"protocol": {
@@ -115,6 +169,10 @@
 
 	"specify": {
 		"message": "Specify"
+	},
+
+	"tab": {
+		"message": "Tab"
 	},
 
 	"target": {
@@ -135,8 +193,30 @@
 		"description": "The title of the tutorial."
 	},
 
+	"useHttp": {
+		"message": "Use http",
+		"description": "Specify http"
+	},
+
+	"useHttps": {
+		"message": "Use https",
+		"description": "Specify https"
+	},
+
+	"viewSource": {
+		"message": "View source"
+	},
+
+	"viewSourceFromBookmark": {
+		"message": "View source of a bookmark"
+	},
+
 	"viewSourceFromLink": {
 		"message": "View source of a link"
+	},
+
+	"viewSourceFromPage": {
+		"message": "View source of a page"
 	},
 
 	"viewSourceFromSelection": {
@@ -145,5 +225,9 @@
 
 	"watchTheVideo": {
 		"message": "Watch the Video"
+	},
+
+	"window": {
+		"message": "Window"
 	}
 }

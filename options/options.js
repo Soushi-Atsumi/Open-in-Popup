@@ -1,5 +1,5 @@
 ﻿/*
- * Open in Popup - More useful searching extension than Built-in features.
+ * Open in Popup - Very simple and useful extension. You can open a link in the popup.
  * Copyright (c) 2018 Soushi Atsumi. All rights reserved.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,103 +11,121 @@
  */
 'use strict';
 
-var xmlHttpRequest = new XMLHttpRequest();
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/StorageKeys.json'), false);
-xmlHttpRequest.send();
-const storageKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/TargetKeys.json'), false);
-xmlHttpRequest.send();
-const targetKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/ProtocolKeys.json'), false);
-xmlHttpRequest.send();
-const protocolKeys = JSON.parse(xmlHttpRequest.responseText);
-xmlHttpRequest.open('GET', browser.extension.getURL('/_values/PopupKeys.json'), false);
-xmlHttpRequest.send();
-const popupKeys = JSON.parse(xmlHttpRequest.responseText);
+var storageKeys;
+var targetKeys;
+var protocolKeys;
+var placementKeys;
 
-document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
-document.title = browser.i18n.getMessage('optionsHTMLTitle');
-document.getElementById('protocolLegend').innerText = browser.i18n.getMessage('protocol');
-document.getElementById('askProtocolLabel').innerText = browser.i18n.getMessage('ask');
-document.getElementById('alwaysUsesHttpLabel').innerText = browser.i18n.getMessage('alwaysUsesHttp');
-document.getElementById('alwaysUsesHttpsLabel').innerText = browser.i18n.getMessage('alwaysUsesHttps');
-document.getElementById('targetLegend').innerText = browser.i18n.getMessage('target');
-document.getElementById('askTargetLabel').innerText = browser.i18n.getMessage('ask');
-document.getElementById('specifyTargetLabel').innerText = browser.i18n.getMessage('specify');
-document.getElementById('openFromLinkLabel').innerText = browser.i18n.getMessage('openFromLink');
-document.getElementById('openFromSelectionLabel').innerText = browser.i18n.getMessage('openFromSelection');
-document.getElementById('viewSourceFromLinkLabel').innerText = browser.i18n.getMessage('viewSourceFromLink');
-document.getElementById('viewSourceFromSelectionLabel').innerText = browser.i18n.getMessage('viewSourceFromSelection');
+const checkboxes = document.getElementsByClassName('checkbox');
+const protocolAskRadio = document.getElementById('protocol-ask');
+const protocolHttpRadio = document.getElementById('protocol-http');
+const protocolHttpsRadio = document.getElementById('protocol-https');
 
-var protocolAskRadio = document.getElementById('protocol-ask');
-var protocolHttpRadio = document.getElementById('protocol-http');
-var protocolHttpsRadio = document.getElementById('protocol-https');
+const targetAskRadio = document.getElementById('target-ask');
+const targetSpecifyRadio = document.getElementById('target-specify');
+const targetBookmarkCheckbox = document.getElementById('target-bookmark');
+const targetLinkCheckbox = document.getElementById('target-link');
+const targetPageCheckbox = document.getElementById('target-page');
+const targetSelectionCheckbox = document.getElementById('target-selection');
+const targetViewSourceFromBookmarkCheckbox = document.getElementById('target-view-source-from-bookmark');
+const targetViewSourceLinkCheckbox = document.getElementById('target-view-source-link');
+const targetViewSourcePageCheckbox = document.getElementById('target-view-source-page');
+const targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
+const initialLocation = document.getElementById('initial-location');
+const additionalPermissionsBookmarksCheckbox = document.getElementById('additional-permissions-bookmarks');
+const placementAllRadio = document.getElementById('placement-all');
+const placementTabRadio = document.getElementById('placement-tab');
+const placementWindowRadio = document.getElementById('placement-window');
 
-document.options.protocol.forEach((element) => {
-	element.addEventListener('click', protocolOnClick);
-});
+main();
 
-var checkboxes = document.getElementsByClassName('checkbox');
-
-document.options.target.forEach((element) => {
-	element.addEventListener('click', targetOnClick);
-});
-
-var targetAskRadio = document.getElementById('target-ask');
-var targetSpecifyRadio = document.getElementById('target-specify');
-var targetLinkCheckbox = document.getElementById('target-link');
-var targetSelectionCheckbox = document.getElementById('target-selection');
-var targetViewSourceLinkCheckbox = document.getElementById('target-view-source-link');
-var targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
-
-for (let checkbox of checkboxes) {
-	checkbox.addEventListener('click', checkboxesOnClick);
+async function main() {
+	await readKeys();
+	initDocuments();
+	addEventListeners();
+	browser.permissions.onAdded.addListener(checkPermissions);
+	browser.permissions.onRemoved.addListener(checkPermissions);
+	checkProtocols();
+	checkTargets();
+	checkCheckboxes();
+	checkInitialLocation();
+	checkPermissions();
+	checkBehaviors();
 }
 
-checkProtocols();
-checkTargets();
-checkCheckboxes();
-
-function protocolOnClick(event) {
-	switch (event.target.id) {
-		case 'protocol-ask':
-			browser.storage.local.set({ [storageKeys.protocol]: protocolKeys.ask });
-			break;
-		case 'protocol-http':
-			browser.storage.local.set({ [storageKeys.protocol]: protocolKeys.http });
-			break;
-		case 'protocol-https':
-			browser.storage.local.set({ [storageKeys.protocol]: protocolKeys.https });
-			break;
+function addEventListeners() {
+	for (let checkbox of checkboxes) {
+		checkbox.addEventListener('click', checkboxesOnClick);
 	}
-
-	createContextMenus();
+	document.options.protocol.forEach((element) => element.addEventListener('click', protocolOnClick));
+	document.options.target.forEach((element) => element.addEventListener('click', targetOnClick));
+	initialLocation.addEventListener('click', (event) => initialLocation.style.backgroundColor = '');
+	initialLocation.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') {
+			if (initialLocation.value === '') {
+				browser.storage.local.remove(storageKeys.initialLocation);
+			} else {
+				browser.storage.local.set({ [storageKeys.initialLocation]: initialLocation.value });
+			}
+			event.preventDefault();
+			initialLocation.blur();
+			initialLocation.style.backgroundColor = 'LightGreen';
+		}
+	});
+	additionalPermissionsBookmarksCheckbox.addEventListener('click', requestPermission);
+	document.options.placement.forEach((element) => element.addEventListener('click', placementOnClick));
 }
 
-function targetOnClick(event) {
-	switch (event.target.id) {
-		case 'target-ask':
-			browser.storage.local.set({ [storageKeys.target]: targetKeys.ask });
-			toggleCheckboxsDisabled(true);
-			break;
-		case 'target-specify':
-			browser.storage.local.set({ [storageKeys.target]: targetKeys.specify });
-			toggleCheckboxsDisabled(false);
-			break;
-	}
-
-	createContextMenus();
+function checkBehaviors() {
+	browser.storage.local.get(storageKeys.placement).then((item) => {
+		switch (item[storageKeys.placement]) {
+			case placementKeys.all:
+				placementAllRadio.checked = true;
+				break;
+			case placementKeys.tab:
+				placementTabRadio.checked = true;
+				break;
+			case placementKeys.window:
+				placementWindowRadio.checked = true;
+				break;
+		}
+	});
 }
 
 function checkboxesOnClick(event) {
-	browser.storage.local.set({
+	saveConfig({
+		[storageKeys.bookmark]: targetBookmarkCheckbox.checked,
 		[storageKeys.link]: targetLinkCheckbox.checked,
+		[storageKeys.page]: targetPageCheckbox.checked,
 		[storageKeys.selection]: targetSelectionCheckbox.checked,
+		[storageKeys.viewSourceFromBookmark]: targetViewSourceFromBookmarkCheckbox.checked,
 		[storageKeys.viewSourceLink]: targetViewSourceLinkCheckbox.checked,
+		[storageKeys.viewSourcePage]: targetViewSourcePageCheckbox.checked,
 		[storageKeys.viewSourceSelection]: targetViewSourceSelectionCheckbox.checked
 	});
+}
 
-	createContextMenus();
+function checkCheckboxes() {
+	browser.storage.local.get([storageKeys.link, storageKeys.selection, storageKeys.viewSourceLink, storageKeys.viewSourceSelection]).then((item) => {
+		targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
+		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.selection];
+		targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
+		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
+		targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
+		targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
+		targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
+		targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
+	});
+}
+
+function checkInitialLocation() {
+	browser.storage.local.get(storageKeys.initialLocation).then((item) => {
+		initialLocation.value = item[storageKeys.initialLocation] || '';
+	});
+}
+
+function checkPermissions() {
+	browser.permissions.getAll().then(permissions => additionalPermissionsBookmarksCheckbox.checked = permissions.permissions.includes('bookmarks'));
 }
 
 function checkProtocols() {
@@ -137,13 +155,108 @@ function checkTargets() {
 	});
 }
 
-function checkCheckboxes() {
-	browser.storage.local.get([storageKeys.link, storageKeys.selection, storageKeys.viewSourceLink, storageKeys.viewSourceSelection]).then((item) => {
-		targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.selection];
-		targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
-		targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
-		targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
+function initDocuments() {
+	document.getElementsByTagName('html')[0].lang = browser.i18n.getUILanguage();
+	document.title = browser.i18n.getMessage('optionsHTMLTitle');
+	document.getElementById('protocolLegend').innerText = browser.i18n.getMessage('protocol');
+	document.getElementById('askProtocolLabel').innerText = browser.i18n.getMessage('ask');
+	document.getElementById('alwaysUsesHttpLabel').innerText = browser.i18n.getMessage('alwaysUsesHttp');
+	document.getElementById('alwaysUsesHttpsLabel').innerText = browser.i18n.getMessage('alwaysUsesHttps');
+	document.getElementById('targetLegend').innerText = browser.i18n.getMessage('target');
+	document.getElementById('askTargetLabel').innerText = browser.i18n.getMessage('ask');
+	document.getElementById('specifyTargetLabel').innerText = browser.i18n.getMessage('specify');
+	document.getElementById('openFromBookmarkLabel').innerText = browser.i18n.getMessage('openFromBookmark');
+	document.getElementById('openFromLinkLabel').innerText = browser.i18n.getMessage('openFromLink');
+	document.getElementById('openFromPageLabel').innerText = browser.i18n.getMessage('openFromPage');
+	document.getElementById('openFromSelectionLabel').innerText = browser.i18n.getMessage('openFromSelection');
+	document.getElementById('viewSourceFromBookmarkLabel').innerText = browser.i18n.getMessage('viewSourceFromBookmark');
+	document.getElementById('viewSourceFromLinkLabel').innerText = browser.i18n.getMessage('viewSourceFromLink');
+	document.getElementById('viewSourceFromPageLabel').innerText = browser.i18n.getMessage('viewSourceFromPage');
+	document.getElementById('viewSourceFromSelectionLabel').innerText = browser.i18n.getMessage('viewSourceFromSelection');
+	document.getElementById('initialLocationLegend').innerText = browser.i18n.getMessage('initialLocation');
+	document.getElementById('initialLocationLabel').innerText = browser.i18n.getMessage('initialLocationDescription');
+	document.getElementById('additionalPermissionsLegend').innerText = browser.i18n.getMessage('additionalPermissions');
+	document.getElementById('bookmarksLabel').innerText = browser.i18n.getMessage('bookmarks');
+	document.getElementById('placementLegend').innerText = browser.i18n.getMessage('placement');
+	document.getElementById('placementAllLabel').innerText = browser.i18n.getMessage('all');
+	document.getElementById('placementAllCautionLabel').innerText = browser.i18n.getMessage('placementAllCaution');
+	document.getElementById('placementAllDescriptionLabel').innerText = browser.i18n.getMessage('placementAllDescription');
+	document.getElementById('placementTabLabel').innerText = browser.i18n.getMessage('tab');
+	document.getElementById('placementTabCautionLabel').innerText = browser.i18n.getMessage('placementTabCaution');
+	document.getElementById('placementTabDescriptionLabel').innerText = browser.i18n.getMessage('placementTabDescription');
+	document.getElementById('placementWindowLabel').innerText = browser.i18n.getMessage('window');
+	document.getElementById('placementWindowCautionLabel').innerText = browser.i18n.getMessage('placementWindowCaution');
+	document.getElementById('placementWindowDescriptionLabel').innerText = browser.i18n.getMessage('placementWindowDescription');
+}
+
+function notifyRefreshing() {
+	browser.runtime.sendMessage({ action: 'refresh' });
+}
+
+function placementOnClick(event) {
+	switch (event.target.id) {
+		case 'placement-all':
+			saveConfig({ [storageKeys.placement]: placementKeys.all });
+			break;
+		case 'placement-tab':
+			saveConfig({ [storageKeys.placement]: placementKeys.tab });
+			break;
+		case 'placement-window':
+			saveConfig({ [storageKeys.placement]: placementKeys.window });
+			break;
+	}
+}
+
+function protocolOnClick(event) {
+	switch (event.target.id) {
+		case 'protocol-ask':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.ask });
+			break;
+		case 'protocol-http':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.http });
+			break;
+		case 'protocol-https':
+			saveConfig({ [storageKeys.protocol]: protocolKeys.https });
+			break;
+	}
+}
+
+async function readKeys() {
+	const keyFiles = ['PlacementKeys.json', 'ProtocolKeys.json', 'StorageKeys.json', 'TargetKeys.json'].map(keyFile => `/_values/${keyFile}`);
+	return Promise.all(keyFiles.map(keyFile => fetch((keyFile)))).then(values => {
+		return Promise.all(values.map(value => value.text()));
+	}).then(values => {
+		placementKeys = JSON.parse(values[0]);
+		protocolKeys = JSON.parse(values[1]);
+		storageKeys = JSON.parse(values[2]);
+		targetKeys = JSON.parse(values[3]);
 	});
+}
+
+function requestPermission(event) {
+	if (event.originalTarget.id === 'additional-permissions-bookmarks') {
+		const bookmarkPermission = { permissions: ['bookmarks'] };
+		if (additionalPermissionsBookmarksCheckbox.checked) {
+			browser.permissions.request(bookmarkPermission).then((accepted) => {
+				additionalPermissionsBookmarksCheckbox.checked = accepted;
+			});
+		} else {
+			browser.permissions.remove(bookmarkPermission);
+		}
+	}
+}
+
+function targetOnClick(event) {
+	switch (event.target.id) {
+		case 'target-ask':
+			saveConfig({ [storageKeys.target]: targetKeys.ask });
+			toggleCheckboxsDisabled(true);
+			break;
+		case 'target-specify':
+			saveConfig({ [storageKeys.target]: targetKeys.specify });
+			toggleCheckboxsDisabled(false);
+			break;
+	}
 }
 
 function toggleCheckboxsDisabled(disabled) {
@@ -152,101 +265,6 @@ function toggleCheckboxsDisabled(disabled) {
 	}
 }
 
-async function createContextMenus() {
-	browser.contextMenus.removeAll();
-
-	var protocol;
-	var target;
-	var linkIsEnabled;
-	var selectionIsEnabled;
-	var viewSourceLinkIsEnabled;
-	var viewSourceSelectionIsEnabled;
-
-	await browser.storage.local.get().then((item) => {
-		protocol = item[storageKeys.protocol] === undefined ? protocolKeys.ask : item[storageKeys.protocol];
-		target = item[storageKeys.target] === undefined ? targetKeys.ask : item[storageKeys.target];
-		linkIsEnabled = target === targetKeys.ask || item[storageKeys.link] === undefined ? true : item[storageKeys.link];
-		selectionIsEnabled = target === targetKeys.ask || item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
-		viewSourceLinkIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
-		viewSourceSelectionIsEnabled = target === targetKeys.ask || item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
-	});
-
-	browser.contextMenus.create({
-		contexts: ['browser_action'],
-		icons: {
-			'1536': 'icons/icon-1536.png'
-		},
-		id: popupKeys.tutorialId,
-		title: browser.i18n.getMessage('tutorial')
-	});
-
-	if (protocol !== protocolKeys.http) {
-		if (linkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.httpsLinkId,
-				title: browser.i18n.getMessage("openingProtocolHttpsFromLink")
-			});
-		}
-
-		if (selectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.httpsSelectionId,
-				title: browser.i18n.getMessage("openingProtocolHttpsFromSelection")
-			});
-		}
-
-		if (viewSourceLinkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.viewSourceHttpsLinkId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromLink')
-			});
-		}
-
-		if (viewSourceSelectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.viewSourceHttpsSelectionId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpsFromSelection')
-			});
-		}
-	}
-
-	if (protocol !== protocolKeys.https) {
-		if (linkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.httpLinkId,
-				title: browser.i18n.getMessage("openingProtocolHttpFromLink")
-			});
-		}
-
-		if (selectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.httpSelectionId,
-				title: browser.i18n.getMessage("openingProtocolHttpFromSelection")
-			});
-		}
-
-		if (viewSourceLinkIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['link'],
-				id: popupKeys.viewSourceHttpLinkId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromLink')
-			});
-		}
-
-		if (viewSourceSelectionIsEnabled) {
-			browser.contextMenus.create({
-				contexts: ['selection'],
-				id: popupKeys.viewSourceHttpSelectionId,
-				title: browser.i18n.getMessage('openingProtocolViewSourceHttpFromSelection')
-			});
-		}
-	}
-
-	browser.contextMenus.refresh();
+function saveConfig(keys) {
+	browser.storage.local.set(keys).then(notifyRefreshing());
 }

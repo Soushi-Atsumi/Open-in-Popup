@@ -1,4 +1,12 @@
 ﻿{
+	"additionalPermissions": {
+		"message": "追加の権限"
+	},
+
+	"all": {
+		"message": "全て"
+	},
+
 	"alwaysUsesHttp": {
 		"message": "常にhttpを使用する"
 	},
@@ -9,6 +17,10 @@
 
 	"ask": {
 		"message": "尋ねる"
+	},
+
+	"bookmarks": {
+		"message": "ブックマーク"
 	},
 
 	"errorHTMLTitle": {
@@ -42,8 +54,13 @@
 	},
 
 	"indexHTMLHeading2": {
-		"message": "2.開きたい形式を選択してリンクを開く(よく分からなければhttpsを使用する)",
+		"message": "2.開きたい形式を選択してリンクを開く(よく分からなければhttpsを使用する)。",
 		"description": "index.htmlの2番目の見出し。"
+	},
+
+	"indexHTMLOthers": {
+		"message": "その他: 音声、画像、動画、ブックマークとタブもポップアップで開くことができます。",
+		"description": "index.htmlのその他"
 	},
 
 	"indexHTMLTitle": {
@@ -56,57 +73,94 @@
 		"description": "使い方の動画のURL。"
 	},
 
+	"initialLocation": {
+		"message": "初期場所"
+	},
+
+	"initialLocationDescription": {
+		"message": "Enterを押すと保存します。空欄にすると初期状態に戻ります。"
+	},
+
+	"openFromBookmark": {
+		"message": "ブックマークから開く"
+	},
+
 	"openFromLink": {
 		"message": "リンクから開く"
+	},
+
+	"openFromPage": {
+		"message": "ページから開く"
 	},
 
 	"openFromSelection": {
 		"message": "選択文字から開く"
 	},
 
-	"openingProtocolHttpFromLink": {
-		"message": "httpを使用する(リンク)",
-		"description": "httpの指定(リンク)"
+	"openThisAudio": {
+		"message": "この音声を開く"
 	},
 
-	"openingProtocolHttpFromSelection": {
-		"message": "httpを使用する(選択文字)",
-		"description": "httpの指定(選択文字)"
+	"openThisBookmark": {
+		"message": "このブックマークを開く"
 	},
 
-	"openingProtocolViewSourceHttpFromLink": {
-		"message": "httpを使用する(リンクのソースを見る)",
-		"description": "httpの指定(リンクのソースを見る)"
+	"openThisImage": {
+		"message": "この画像を開く"
 	},
 
-	"openingProtocolViewSourceHttpFromSelection": {
-		"message": "httpを使用する(選択文字のソースを見る)",
-		"description": "httpの指定(選択文字のソースを見る)"
+	"openThisLink": {
+		"message": "このリンクを開く"
 	},
 
-	"openingProtocolHttpsFromLink": {
-		"message": "httpsを使用する(リンク)",
-		"description": "httpsの指定(リンク)"
+	"openThisPage": {
+		"message": "このページを開く"
 	},
 
-	"openingProtocolHttpsFromSelection": {
-		"message": "httpsを使用する(選択文字)",
-		"description": "httpsの指定(選択文字)"
+	"openThisSelection": {
+		"message": "この選択文字を開く"
 	},
 
-	"openingProtocolViewSourceHttpsFromLink": {
-		"message": "httpsを使用する(リンクのソースを見る)",
-		"description": "httpsの指定(リンクのソースを見る)"
-	},
-
-	"openingProtocolViewSourceHttpsFromSelection": {
-		"message": "httpsを使用する(選択文字のソースを見る)",
-		"description": "httpsの指定(選択文字のソースを見る)"
+	"openThisVideo": {
+		"message": "この動画を開く"
 	},
 
 	"optionsHTMLTitle": {
 		"message": "設定",
 		"description": "options.htmlの題名。"
+	},
+
+	"placement": {
+		"message": "配置"
+	},
+
+	"placementAllCaution": {
+		"message": "「全て」は「タブ」と「ウィンドウ」を上書きできません。「全て」を「タブ」と「ウィンドウ」で上書きすることはできます。"
+	},
+
+	"placementAllDescription": {
+		"message": "全てのポップアップを上書きします。"
+	},
+
+	"placementTabCaution": {
+		"message": "「タブ」は「タブ」以外に上書きされません。"
+	},
+
+	"placementTabDescription": {
+		"message": "現在のタブに存在するポップアップを上書きします。"
+	},
+
+	"placementWindowCaution": {
+		"message": "「ウィンドウ」は「タブ」を上書きできません。「ウィンドウ」を「タブ」と「ウィンドウ」で上書きすることはできます。"
+	},
+
+	"placementWindowDescription": {
+		"message": "現在のウィンドウに存在するポップアップを上書きします。"
+	},
+
+	"popupHTMLTitle": {
+		"message": "ポップアップで開く",
+		"description": "popup.htmlの題名。"
 	},
 
 	"protocol": {
@@ -115,6 +169,10 @@
 
 	"specify": {
 		"message": "指定する"
+	},
+
+	"tab": {
+		"message": "タブ"
 	},
 
 	"target": {
@@ -135,8 +193,30 @@
 		"description": "使い方の題名。"
 	},
 
+	"useHttp": {
+		"message": "httpを使用する",
+		"description": "httpの指定"
+	},
+
+	"useHttps": {
+		"message": "httpsを使用する",
+		"description": "httpsの指定"
+	},
+
+	"viewSource": {
+		"message": "ソースを見る"
+	},
+
+	"viewSourceFromBookmark": {
+		"message": "ブックマークのソースを開く"
+	},
+
 	"viewSourceFromLink": {
 		"message": "リンクのソースを開く"
+	},
+
+	"viewSourceFromPage": {
+		"message": "ページのソースを開く"
 	},
 
 	"viewSourceFromSelection": {
@@ -145,5 +225,9 @@
 
 	"watchTheVideo": {
 		"message": "動画を観る"
+	},
+
+	"window": {
+		"message": "ウィンドウ"
 	}
 }
