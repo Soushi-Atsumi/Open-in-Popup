@@ -21,6 +21,7 @@ var currentSettings;
 var currentTabId;
 var currentWindowId;
 
+const optionsId = 'options';
 const tutorialId = 'tutorial';
 const httpsAudioId = 'https-audio';
 const httpsBookmarkId = 'https-Bookmark';
@@ -72,19 +73,20 @@ async function main() {
 
 async function createContextMenus() {
 	const contextMenusObject = await createContextMenusObject();
+	const manifest = JSON.parse(await (await fetch("manifest.json")).text());
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
-		icons: {
-			"48": "icons/icon-48.png",
-			"96": "icons/icon-96.png",
-			"192": "icons/icon-192.png",
-			"384": "icons/icon-384.png",
-			"768": "icons/icon-768.png",
-			"1536": "icons/icon-1536.png"
-		},
+		icons: manifest.icons,
 		id: tutorialId,
-		title: browser.i18n.getMessage('tutorial')
+		title: browser.i18n.getMessage('openTutorial')
+	});
+
+	browser.contextMenus.create({
+		contexts: ['browser_action'],
+		icons: manifest.icons,
+		id: optionsId,
+		title: browser.i18n.getMessage('openOptions')
 	});
 
 	for (let i in contextMenusObject) {
@@ -295,6 +297,9 @@ async function openInThePopup(info, tab) {
 			case tutorialId:
 				url = new URL(browser.runtime.getURL('/index.html'));
 				break;
+			case optionsId:
+				url = new URL((await browser.management.getSelf()).optionsUrl);
+				break;
 			case httpLinkId:
 			case httpsLinkId:
 			case viewSourceHttpLinkId:
@@ -335,7 +340,7 @@ async function openInThePopup(info, tab) {
 					if (bookmarks[0].type === browser.bookmarks.BookmarkTreeNodeType.BOOKMARK) {
 						url = new URL(bookmarks[0].url);
 					} else {
-						url = new URL(browser.runtime.getURL('error/error.html'));
+						throw `${bookmarks[0].url} is not a bookmark of a page.`;
 					}
 				});
 				break;

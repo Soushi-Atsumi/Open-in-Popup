@@ -46,7 +46,7 @@
 
 	"name": "__MSG_extensionName__",
 
-	"optional_permissions": ["bookmarks"],
+	"optional_permissions": [ "bookmarks" ],
 
 	"options_ui": {
 		"page": "options/options.html",
@@ -55,5 +55,5 @@
 
 	"permissions": [ "activeTab", "contextMenus", "storage" ],
 
-	"version": "3.0"
+	"version": "3.1"
 }
