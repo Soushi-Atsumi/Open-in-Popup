@@ -28,11 +28,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ja", "ja", "{7F4EDD11-2B70-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_values", "_values", "{E2E43A01-E42E-45A2-9389-5BE396D3516C}"
 	ProjectSection(SolutionItems) = preProject
-		_values\MediaTypeKeys.json = _values\MediaTypeKeys.json
-		_values\PlacementKeys.json = _values\PlacementKeys.json
-		_values\ProtocolKeys.json = _values\ProtocolKeys.json
+		_values\MediaTypes.json = _values\MediaTypes.json
+		_values\Placements.json = _values\Placements.json
+		_values\Protocols.json = _values\Protocols.json
 		_values\StorageKeys.json = _values\StorageKeys.json
-		_values\TargetKeys.json = _values\TargetKeys.json
+		_values\Targets.json = _values\Targets.json
+		_values\UserAgents.json = _values\UserAgents.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "background", "background", "{FA476EEF-BD39-4EB1-B9A7-98679221F055}"
