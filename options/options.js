@@ -56,7 +56,7 @@ async function main() {
 	checkInitialLocation();
 	await checkPermissions();
 	checkUserAgents();
-	checkBehaviors();
+	checkPlacements();
 }
 
 function addEventListeners() {
@@ -81,22 +81,6 @@ function addEventListeners() {
 	browser.permissions.onRemoved.addListener(checkPermissions);
 	document.options.userAgent.forEach(element => element.addEventListener('click', userAgentOnClick));
 	document.options.placement.forEach(element => element.addEventListener('click', placementOnClick));
-}
-
-function checkBehaviors() {
-	browser.storage.local.get(storageKeys.placement).then(item => {
-		switch (item[storageKeys.placement]) {
-			case placements.all:
-				placementAllRadio.checked = true;
-				break;
-			case placements.tab:
-				placementTabRadio.checked = true;
-				break;
-			case placements.window:
-				placementWindowRadio.checked = true;
-				break;
-		}
-	});
 }
 
 function checkboxesOnClick() {
@@ -135,6 +119,22 @@ async function checkPermissions() {
 	additionalPermissionsBookmarksCheckbox.checked = await browser.permissions.contains(bookmarksPermissions);
 	additionalPermissionsHostCheckbox.checked = await browser.permissions.contains(hostPermissions);
 	toggleUserAgentRadioDisabled(!additionalPermissionsHostCheckbox.checked);
+}
+
+function checkPlacements() {
+	browser.storage.local.get(storageKeys.placement).then(item => {
+		switch (item[storageKeys.placement]) {
+			case placements.all:
+				placementAllRadio.checked = true;
+				break;
+			case placements.tab:
+				placementTabRadio.checked = true;
+				break;
+			case placements.window:
+				placementWindowRadio.checked = true;
+				break;
+		}
+	});
 }
 
 function checkProtocols() {

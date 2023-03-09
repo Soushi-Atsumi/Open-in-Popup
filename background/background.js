@@ -162,6 +162,7 @@ async function createContextMenusObject() {
 	contextMenusObject.http.audio = {
 		contexts: ['audio'],
 		id: httpAudioId,
+		targetUrlPatterns: ['http://*/*'],
 		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https
 	};
@@ -176,6 +177,7 @@ async function createContextMenusObject() {
 	contextMenusObject.http.image = {
 		contexts: ['image'],
 		id: httpImageId,
+		targetUrlPatterns: ['http://*/*'],
 		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https
 	};
@@ -183,12 +185,14 @@ async function createContextMenusObject() {
 	contextMenusObject.http.link = {
 		contexts: ['link'],
 		id: httpLinkId,
+		targetUrlPatterns: ['http://*/*'],
 		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https && linkIsEnabled
 	};
 
 	contextMenusObject.http.page = {
 		contexts: ['page', 'tab'],
+		documentUrlPatterns: ['http://*/*'],
 		id: httpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https && pageIsEnabled
@@ -204,6 +208,7 @@ async function createContextMenusObject() {
 	contextMenusObject.http.video = {
 		contexts: ['video'],
 		id: httpVideoId,
+		targetUrlPatterns: ['http://*/*'],
 		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https
 	};
@@ -218,12 +223,14 @@ async function createContextMenusObject() {
 	contextMenusObject.http.viewSourceLink = {
 		contexts: ['link'],
 		id: viewSourceHttpLinkId,
+		targetUrlPatterns: ['http://*/*'],
 		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpMessage}`,
 		visible: protocol !== protocols.https && viewSourceLinkIsEnabled
 	};
 
 	contextMenusObject.http.viewSourcePage = {
 		contexts: ['page', 'tab'],
+		documentUrlPatterns: ['http://*/*'],
 		id: viewSourceHttpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpMessage}`,
 		visible: protocol !== protocols.https && viewSourcePageIsEnabled
@@ -240,6 +247,7 @@ async function createContextMenusObject() {
 	contextMenusObject.https.audio = {
 		contexts: ['audio'],
 		id: httpsAudioId,
+		targetUrlPatterns: ['*://*/*'],
 		title: `${browser.i18n.getMessage('openThisAudio')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http
 	};
@@ -254,6 +262,7 @@ async function createContextMenusObject() {
 	contextMenusObject.https.image = {
 		contexts: ['image'],
 		id: httpsImageId,
+		targetUrlPatterns: ['*://*/*'],
 		title: `${browser.i18n.getMessage('openThisImage')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http
 	};
@@ -261,12 +270,14 @@ async function createContextMenusObject() {
 	contextMenusObject.https.link = {
 		contexts: ['link'],
 		id: httpsLinkId,
+		targetUrlPatterns: ['*://*/*'],
 		title: `${browser.i18n.getMessage('openThisLink')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http && linkIsEnabled
 	};
 
 	contextMenusObject.https.page = {
 		contexts: ['page', 'tab'],
+		documentUrlPatterns: ['*://*/*'],
 		id: httpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http && pageIsEnabled
@@ -282,6 +293,7 @@ async function createContextMenusObject() {
 	contextMenusObject.https.video = {
 		contexts: ['video'],
 		id: httpsVideoId,
+		targetUrlPatterns: ['*://*/*'],
 		title: `${browser.i18n.getMessage('openThisVideo')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http
 	};
@@ -296,12 +308,14 @@ async function createContextMenusObject() {
 	contextMenusObject.https.viewSourceLink = {
 		contexts: ['link'],
 		id: viewSourceHttpsLinkId,
+		targetUrlPatterns: ['*://*/*'],
 		title: `${browser.i18n.getMessage('openThisLink')}${viewSourceHttpsMessage}`,
 		visible: protocol !== protocols.http && viewSourceLinkIsEnabled
 	};
 
 	contextMenusObject.https.viewSourcePage = {
 		contexts: ['page', 'tab'],
+		documentUrlPatterns: ['*://*/*'],
 		id: viewSourceHttpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpsMessage}`,
 		visible: protocol !== protocols.http && viewSourcePageIsEnabled
