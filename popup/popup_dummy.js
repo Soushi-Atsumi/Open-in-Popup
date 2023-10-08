@@ -15,6 +15,4 @@ const urlSearchParams = new URLSearchParams(window.location.search);
 const tabId = isNaN(parseInt(urlSearchParams.get('tabId'))) ? undefined : parseInt(urlSearchParams.get('tabId'));
 const windowId = isNaN(parseInt(urlSearchParams.get('windowId'))) ? undefined : parseInt(urlSearchParams.get('windowId'));
 
-setTimeout(() => browser.browserAction.getPopup({ tabId: tabId, windowId: windowId }).then((url) => {
-	window.location = url;
-}), 500);
+setTimeout(async () => window.location = await browser.browserAction.getPopup({ tabId: tabId, windowId: windowId }), 500);

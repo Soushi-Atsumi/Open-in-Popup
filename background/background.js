@@ -92,18 +92,14 @@ async function main() {
 	};
 	browser.permissions.onAdded.addListener(permissionsOnAddedListener);
 	browser.permissions.onRemoved.addListener(permissionsOnRemovedListener);
-	browser.runtime.onMessage.addListener((message, _0, _1) => {
+	browser.runtime.onMessage.addListener(async (message, _0, _1) => {
 		if (message.action === 'refresh') {
-			browser.storage.local.get().then(item => {
-				currentSettings = item;
-				updateContextMenus();
-			});
+			currentSettings = await (await getStorageType()).get();
+			updateContextMenus();
 		}
 	});
-	browser.storage.local.get().then(item => {
-		currentSettings = item;
-		return createContextMenus();
-	});
+	currentSettings = await (await getStorageType()).get();
+	await createContextMenus();
 	if (await browser.permissions.contains(hostPermissions)) {
 		browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersListener, filter, extraInfoSpec);
 	}
@@ -111,7 +107,7 @@ async function main() {
 
 async function createContextMenus() {
 	const contextMenusObject = await createContextMenusObject();
-	const manifest = JSON.parse(await (await fetch('manifest.json')).text());
+	const manifest = await (await fetch('manifest.json')).json();
 
 	browser.contextMenus.create({
 		contexts: ['browser_action'],
@@ -331,6 +327,11 @@ async function createContextMenusObject() {
 	return contextMenusObject;
 }
 
+async function getStorageType() {
+	const item = await browser.storage.local.get();
+	return Object.keys(item).length === 0 || item[storageKeys.sync] ? browser.storage.sync : browser.storage.local;
+}
+
 async function openInThePopup(info, tab) {
 	let url;
 
@@ -381,13 +382,12 @@ async function openInThePopup(info, tab) {
 			case httpsBookmarkId:
 			case viewSourceHttpBookmarkId:
 			case viewSourceHttpsBookmarkId:
-				await browser.bookmarks.get(info.bookmarkId).then(bookmarks => {
-					if (bookmarks[0].type === browser.bookmarks.BookmarkTreeNodeType.BOOKMARK) {
-						url = new URL(bookmarks[0].url);
-					} else {
-						throw `${bookmarks[0].url} is not a bookmark of a page.`;
-					}
-				});
+				const bookmarks = await browser.bookmarks.get(info.bookmarkId);
+				if (bookmarks[0].type === browser.bookmarks.BookmarkTreeNodeType.BOOKMARK) {
+					url = new URL(bookmarks[0].url);
+				} else {
+					throw `${bookmarks[0].url} is not a bookmark of a page.`;
+				}
 				break;
 		}
 
@@ -462,16 +462,13 @@ async function openInThePopup(info, tab) {
 
 async function readValues() {
 	const keyFiles = ['MediaTypes.json', 'Placements.json', 'Protocols.json', 'StorageKeys.json', 'Targets.json', 'UserAgents.json'].map(keyFile => `/_values/${keyFile}`);
-	return Promise.all(keyFiles.map(keyFile => fetch(keyFile))).then(values => {
-		return Promise.all(values.map(value => value.text()));
-	}).then(values => {
-		mediaTypes = JSON.parse(values[0]);
-		placements = JSON.parse(values[1]);
-		protocols = JSON.parse(values[2]);
-		storageKeys = JSON.parse(values[3]);
-		targets = JSON.parse(values[4]);
-		userAgents = JSON.parse(values[5]);
-	});
+	const jsonContents = await Promise.all(keyFiles.map(async keyFile => await (await fetch(keyFile)).json()));
+	mediaTypes = jsonContents[0];
+	placements = jsonContents[1];
+	protocols = jsonContents[2];
+	storageKeys = jsonContents[3];
+	targets = jsonContents[4];
+	userAgents = jsonContents[5];
 }
 
 async function setPopupDummy(tabId, windowId) {
