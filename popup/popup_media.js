@@ -16,7 +16,7 @@ main();
 async function main() {
     let media;
     const urlSearchParams = new URLSearchParams(window.location.search);
-    const mediaTypeKeys = JSON.parse(await (await fetch('/_values/MediaTypes.json')).text());
+    const mediaTypeKeys = await (await fetch('/_values/MediaTypes.json')).json();
 
     if (urlSearchParams.has(mediaTypeKeys.audio)) {
         media = new Audio(decodeURIComponent(urlSearchParams.get(mediaTypeKeys.audio)));

@@ -27,6 +27,10 @@
 		"message": "既定値"
 	},
 
+	"enabled": {
+		"message": "有効"
+	},
+
 	"errorHTMLTitle": {
 		"message": "エラー",
 		"description": "error.htmlの題名。"
@@ -193,6 +197,10 @@
 
 	"specify": {
 		"message": "指定する"
+	},
+
+	"synchronization": {
+		"message": "同期"
 	},
 
 	"tab": {
