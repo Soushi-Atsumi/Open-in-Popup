@@ -105,8 +105,16 @@
 		"message": "ページから開く"
 	},
 
+	"openFromPopup": {
+		"message": "ポップアップから開く"
+	},
+
 	"openFromSelection": {
 		"message": "選択文字から開く"
+	},
+
+	"openFromTab": {
+		"message": "タブから開く"
 	},
 
 	"openOptions": {
@@ -133,8 +141,16 @@
 		"message": "このページを開く"
 	},
 
+	"openThisPopup": {
+		"message": "このポップアップを開く"
+	},
+
 	"openThisSelection": {
 		"message": "この選択文字を開く"
+	},
+
+	"openThisTab": {
+		"message": "このタブを開く"
 	},
 
 	"openThisVideo": {
@@ -250,8 +266,16 @@
 		"message": "ページのソースを開く"
 	},
 
+	"viewSourceFromPopup": {
+		"message": "ポップアップのソースを開く"
+	},
+
 	"viewSourceFromSelection": {
 		"message": "選択文字のソースを開く"
+	},
+
+	"viewSourceFromTab": {
+		"message": "タブのソースを開く"
 	},
 
 	"watchTheVideo": {

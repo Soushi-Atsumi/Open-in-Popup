@@ -29,11 +29,15 @@ const targetSpecifyRadio = document.getElementById('target-specify');
 const targetBookmarkCheckbox = document.getElementById('target-bookmark');
 const targetLinkCheckbox = document.getElementById('target-link');
 const targetPageCheckbox = document.getElementById('target-page');
+const targetPopupCheckbox = document.getElementById('target-popup');
 const targetSelectionCheckbox = document.getElementById('target-selection');
+const targetTabCheckbox = document.getElementById('target-tab');
 const targetViewSourceFromBookmarkCheckbox = document.getElementById('target-view-source-from-bookmark');
 const targetViewSourceLinkCheckbox = document.getElementById('target-view-source-link');
 const targetViewSourcePageCheckbox = document.getElementById('target-view-source-page');
+const targetViewSourcePopupCheckbox = document.getElementById('target-view-source-popup');
 const targetViewSourceSelectionCheckbox = document.getElementById('target-view-source-selection');
+const targetViewSourceTabCheckbox = document.getElementById('target-view-source-tab');
 const initialLocation = document.getElementById('initial-location');
 const additionalPermissionsBookmarksCheckbox = document.getElementById('additional-permissions-bookmarks');
 const additionalPermissionsHostCheckbox = document.getElementById('additional-permissions-host');
@@ -101,11 +105,15 @@ function checkboxesOnClick() {
 		[storageKeys.bookmark]: targetBookmarkCheckbox.checked,
 		[storageKeys.link]: targetLinkCheckbox.checked,
 		[storageKeys.page]: targetPageCheckbox.checked,
+		[storageKeys.popup]: targetPopupCheckbox.checked,
 		[storageKeys.selection]: targetSelectionCheckbox.checked,
+		[storageKeys.tab]: targetTabCheckbox.checked,
 		[storageKeys.viewSourceFromBookmark]: targetViewSourceFromBookmarkCheckbox.checked,
 		[storageKeys.viewSourceLink]: targetViewSourceLinkCheckbox.checked,
 		[storageKeys.viewSourcePage]: targetViewSourcePageCheckbox.checked,
-		[storageKeys.viewSourceSelection]: targetViewSourceSelectionCheckbox.checked
+		[storageKeys.viewSourcePopup]: targetViewSourcePopupCheckbox.checked,
+		[storageKeys.viewSourceSelection]: targetViewSourceSelectionCheckbox.checked,
+		[storageKeys.viewSourceTab]: targetViewSourceTabCheckbox.checked
 	});
 }
 
@@ -114,11 +122,15 @@ async function checkCheckboxes() {
 	targetBookmarkCheckbox.checked = item[storageKeys.bookmark] === undefined ? true : item[storageKeys.bookmark];
 	targetLinkCheckbox.checked = item[storageKeys.link] === undefined ? true : item[storageKeys.link];
 	targetPageCheckbox.checked = item[storageKeys.page] === undefined ? true : item[storageKeys.page];
+	targetPopupCheckbox.checked = item[storageKeys.popup] === undefined ? true : item[storageKeys.popup];
 	targetSelectionCheckbox.checked = item[storageKeys.selection] === undefined ? true : item[storageKeys.selection];
+	targetTabCheckbox.checked = item[storageKeys.tab] === undefined ? true : item[storageKeys.tab];
 	targetViewSourceFromBookmarkCheckbox.checked = item[storageKeys.viewSourceFromBookmark] === undefined ? true : item[storageKeys.viewSourceFromBookmark];
 	targetViewSourceLinkCheckbox.checked = item[storageKeys.viewSourceLink] === undefined ? true : item[storageKeys.viewSourceLink];
 	targetViewSourcePageCheckbox.checked = item[storageKeys.viewSourcePage] === undefined ? true : item[storageKeys.viewSourcePage];
+	targetViewSourcePopupCheckbox.checked = item[storageKeys.viewSourcePopup] === undefined ? true : item[storageKeys.viewSourcePopup];
 	targetViewSourceSelectionCheckbox.checked = item[storageKeys.viewSourceSelection] === undefined ? true : item[storageKeys.viewSourceSelection];
+	targetViewSourceTabCheckbox.checked = item[storageKeys.viewSourceTab] === undefined ? true : item[storageKeys.viewSourceTab];
 }
 
 async function checkInitialLocation() {
@@ -214,11 +226,15 @@ function initDocuments() {
 	document.getElementById('openFromBookmarkLabel').innerText = browser.i18n.getMessage('openFromBookmark');
 	document.getElementById('openFromLinkLabel').innerText = browser.i18n.getMessage('openFromLink');
 	document.getElementById('openFromPageLabel').innerText = browser.i18n.getMessage('openFromPage');
+	document.getElementById('openFromPopupLabel').innerText = browser.i18n.getMessage('openFromPopup');
 	document.getElementById('openFromSelectionLabel').innerText = browser.i18n.getMessage('openFromSelection');
+	document.getElementById('openFromTabLabel').innerText = browser.i18n.getMessage('openFromTab');
 	document.getElementById('viewSourceFromBookmarkLabel').innerText = browser.i18n.getMessage('viewSourceFromBookmark');
 	document.getElementById('viewSourceFromLinkLabel').innerText = browser.i18n.getMessage('viewSourceFromLink');
 	document.getElementById('viewSourceFromPageLabel').innerText = browser.i18n.getMessage('viewSourceFromPage');
+	document.getElementById('viewSourceFromPopupLabel').innerText = browser.i18n.getMessage('viewSourceFromPopup');
 	document.getElementById('viewSourceFromSelectionLabel').innerText = browser.i18n.getMessage('viewSourceFromSelection');
+	document.getElementById('viewSourceFromTabLabel').innerText = browser.i18n.getMessage('viewSourceFromTab');
 	document.getElementById('initialLocationLegend').innerText = browser.i18n.getMessage('initialLocation');
 	document.getElementById('initialLocationLabel').innerText = browser.i18n.getMessage('initialLocationDescription');
 	document.getElementById('additionalPermissionsLegend').innerText = browser.i18n.getMessage('additionalPermissions');

@@ -11,6 +11,8 @@
 
 	"placement": "Placement",
 
+	"popup": "Popup",
+
 	"protocol": "Protocol",
 
 	"selection": "Selection",
@@ -18,6 +20,8 @@
 	"specify": "Specify",
 	
 	"sync": "Sync",
+
+	"tab": "Tab",
 
 	"target": "Target",
 
@@ -29,5 +33,9 @@
 
 	"viewSourcePage": "ViewSourcePage",
 
-	"viewSourceSelection": "ViewSourceSelection"
+	"viewSourcePopup": "ViewSourcePopup",
+
+	"viewSourceSelection": "ViewSourceSelection",
+
+	"viewSourceTab": "ViewSourceTab"
 }

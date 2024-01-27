@@ -28,23 +28,31 @@ const httpsBookmarkId = 'https-Bookmark';
 const httpsImageId = 'https-image';
 const httpsLinkId = 'https-link';
 const httpsPageId = 'https-page';
+const httpsPopupId = 'https-popup';
 const httpsSelectionId = 'https-selection';
+const httpsTabId = 'https-tab';
 const httpsVideoId = 'https-video';
 const viewSourceHttpsBookmarkId = 'view-source-https-Bookmark';
 const viewSourceHttpsLinkId = 'view-source-https-link';
 const viewSourceHttpsPageId = 'view-source-https-page';
+const viewSourceHttpsPopupionId = 'view-source-https-popup';
 const viewSourceHttpsSelectionId = 'view-source-https-selection';
+const viewSourceHttpsTabionId = 'view-source-https-tab';
 const httpAudioId = 'http-audio';
 const httpBookmarkId = 'http-Bookmark';
 const httpImageId = 'http-image';
 const httpLinkId = 'http-link';
 const httpPageId = 'http-page';
+const httpPopupId = 'http-popup';
 const httpSelectionId = 'http-selection';
+const httpTabId = 'http-tab';
 const httpVideoId = 'http-video';
 const viewSourceHttpBookmarkId = 'view-source-http-Bookmark';
 const viewSourceHttpLinkId = 'view-source-http-link';
 const viewSourceHttpPageId = 'view-source-http-page';
+const viewSourceHttpPopupionId = 'view-source-http-popup';
 const viewSourceHttpSelectionId = 'view-source-http-selection';
+const viewSourceHttpTabionId = 'view-source-http-tab';
 const bookmarksPermissions = { permissions: ['bookmarks'] };
 const hostPermissions = { origins: ['*://*/*'] };
 
@@ -137,11 +145,15 @@ async function createContextMenusObject() {
 	const bookmarkIsEnabled = hasBookmarkPermission && (target === targets.ask || currentSettings[storageKeys.bookmark] === undefined ? true : currentSettings[storageKeys.bookmark]);
 	const linkIsEnabled = target === targets.ask || currentSettings[storageKeys.link] === undefined ? true : currentSettings[storageKeys.link];
 	const pageIsEnabled = target === targets.ask || currentSettings[storageKeys.page] === undefined ? true : currentSettings[storageKeys.page];
+	const popupIsEnabled = target === targets.ask || currentSettings[storageKeys.popup] === undefined ? true : currentSettings[storageKeys.popup];
 	const selectionIsEnabled = target === targets.ask || currentSettings[storageKeys.selection] === undefined ? true : currentSettings[storageKeys.selection];
+	const tabIsEnabled = target === targets.ask || currentSettings[storageKeys.tab] === undefined ? true : currentSettings[storageKeys.tab];
 	const viewSourceFromBookmarkIsEnabled = hasBookmarkPermission && (target === targets.ask || currentSettings[storageKeys.viewSourceFromBookmark] === undefined ? true : currentSettings[storageKeys.viewSourceFromBookmark]);
 	const viewSourceLinkIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceLink] === undefined ? true : currentSettings[storageKeys.viewSourceLink];
 	const viewSourcePageIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourcePage] === undefined ? true : currentSettings[storageKeys.viewSourcePage];
+	const viewSourcePopupIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourcePopup] === undefined ? true : currentSettings[storageKeys.viewSourcePopup];
 	const viewSourceSelectionIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceSelection] === undefined ? true : currentSettings[storageKeys.viewSourceSelection];
+	const viewSourceTabIsEnabled = target === targets.ask || currentSettings[storageKeys.viewSourceTab] === undefined ? true : currentSettings[storageKeys.viewSourceTab];
 
 	const contextMenusObject = {
 		http: {},
@@ -187,11 +199,21 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.http.page = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['http://*/*'],
 		id: httpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpMessage})`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.https && pageIsEnabled
+	};
+
+	contextMenusObject.http.popup = {
+		contexts: ['page'],
+		documentUrlPatterns: ['http://*/*'],
+		id: httpPopupId,
+		title: `${browser.i18n.getMessage('openThisPopup')}(${useHttpMessage})`,
+		viewTypes: [browser.extension.ViewType.POPUP],
+		visible: protocol !== protocols.https && popupIsEnabled
 	};
 
 	contextMenusObject.http.selection = {
@@ -199,6 +221,14 @@ async function createContextMenusObject() {
 		id: httpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpMessage})`,
 		visible: protocol !== protocols.https && selectionIsEnabled
+	};
+
+	contextMenusObject.http.tab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['http://*/*'],
+		id: httpTabId,
+		title: `${browser.i18n.getMessage('openThisTab')}(${useHttpMessage})`,
+		visible: protocol !== protocols.https && tabIsEnabled
 	};
 
 	contextMenusObject.http.video = {
@@ -225,11 +255,21 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.http.viewSourcePage = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['http://*/*'],
 		id: viewSourceHttpPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpMessage}`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.https && viewSourcePageIsEnabled
+	};
+
+	contextMenusObject.http.viewSourcePopup = {
+		contexts: ['page'],
+		documentUrlPatterns: ['http://*/*'],
+		id: viewSourceHttpPopupionId,
+		title: `${browser.i18n.getMessage('openThisPopup')}${viewSourceHttpMessage}`,
+		viewTypes: [browser.extension.ViewType.POPUP],
+		visible: protocol !== protocols.https && viewSourcePopupIsEnabled
 	};
 
 	contextMenusObject.http.viewSourceSelection = {
@@ -237,6 +277,14 @@ async function createContextMenusObject() {
 		id: viewSourceHttpSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpMessage}`,
 		visible: protocol !== protocols.https && viewSourceSelectionIsEnabled
+	};
+
+	contextMenusObject.http.viewSourceTab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['http://*/*'],
+		id: viewSourceHttpTabionId,
+		title: `${browser.i18n.getMessage('openThisTab')}${viewSourceHttpMessage}`,
+		visible: protocol !== protocols.https && viewSourceTabIsEnabled
 	};
 
 	// https
@@ -272,11 +320,21 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.https.page = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['*://*/*'],
 		id: httpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}(${useHttpsMessage})`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.http && pageIsEnabled
+	};
+
+	contextMenusObject.https.popup = {
+		contexts: ['page'],
+		documentUrlPatterns: ['*://*/*'],
+		id: httpsPopupId,
+		title: `${browser.i18n.getMessage('openThisPopup')}(${useHttpsMessage})`,
+		viewTypes: [browser.extension.ViewType.POPUP],
+		visible: protocol !== protocols.http && popupIsEnabled
 	};
 
 	contextMenusObject.https.selection = {
@@ -284,6 +342,14 @@ async function createContextMenusObject() {
 		id: httpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}(${useHttpsMessage})`,
 		visible: protocol !== protocols.http && selectionIsEnabled
+	};
+
+	contextMenusObject.https.tab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['*://*/*'],
+		id: httpsTabId,
+		title: `${browser.i18n.getMessage('openThisTab')}(${useHttpsMessage})`,
+		visible: protocol !== protocols.http && tabIsEnabled
 	};
 
 	contextMenusObject.https.video = {
@@ -310,11 +376,21 @@ async function createContextMenusObject() {
 	};
 
 	contextMenusObject.https.viewSourcePage = {
-		contexts: ['page', 'tab'],
+		contexts: ['page'],
 		documentUrlPatterns: ['*://*/*'],
 		id: viewSourceHttpsPageId,
 		title: `${browser.i18n.getMessage('openThisPage')}${viewSourceHttpsMessage}`,
+		viewTypes: [browser.extension.ViewType.TAB],
 		visible: protocol !== protocols.http && viewSourcePageIsEnabled
+	};
+
+	contextMenusObject.https.viewSourcePopup = {
+		contexts: ['page'],
+		documentUrlPatterns: ['*://*/*'],
+		id: viewSourceHttpsPopupionId,
+		title: `${browser.i18n.getMessage('openThisPopup')}${viewSourceHttpsMessage}`,
+		viewTypes: [browser.extension.ViewType.POPUP],
+		visible: protocol !== protocols.http && viewSourcePopupIsEnabled
 	};
 
 	contextMenusObject.https.viewSourceSelection = {
@@ -322,6 +398,14 @@ async function createContextMenusObject() {
 		id: viewSourceHttpsSelectionId,
 		title: `${browser.i18n.getMessage('openThisSelection')}${viewSourceHttpsMessage}`,
 		visible: protocol !== protocols.http && viewSourceSelectionIsEnabled
+	};
+
+	contextMenusObject.https.viewSourceTab = {
+		contexts: ['tab'],
+		documentUrlPatterns: ['*://*/*'],
+		id: viewSourceHttpsTabionId,
+		title: `${browser.i18n.getMessage('openThisTab')}${viewSourceHttpsMessage}`,
+		visible: protocol !== protocols.http && viewSourceTabIsEnabled
 	};
 
 	return contextMenusObject;
@@ -336,8 +420,39 @@ async function openInThePopup(info, tab) {
 	let url;
 
 	try {
-		setPopupDummy(currentTabId, currentWindowId);
-		browser.browserAction.openPopup();
+		switch (info.menuItemId) {
+			case optionsId:
+			case tutorialId:
+			case httpsAudioId:
+			case httpsBookmarkId:
+			case httpsImageId:
+			case httpsLinkId:
+			case httpsPageId:
+			case httpsSelectionId:
+			case httpsTabId:
+			case httpsVideoId:
+			case viewSourceHttpsBookmarkId:
+			case viewSourceHttpsLinkId:
+			case viewSourceHttpsPageId:
+			case viewSourceHttpsSelectionId:
+			case viewSourceHttpsTabionId:
+			case httpAudioId:
+			case httpBookmarkId:
+			case httpImageId:
+			case httpLinkId:
+			case httpPageId:
+			case httpSelectionId:
+			case httpTabId:
+			case httpVideoId:
+			case viewSourceHttpBookmarkId:
+			case viewSourceHttpLinkId:
+			case viewSourceHttpPageId:
+			case viewSourceHttpSelectionId:
+			case viewSourceHttpTabionId:
+				setPopupDummy(currentTabId, currentWindowId);
+				browser.browserAction.openPopup();
+				break;
+		}
 
 		switch (info.menuItemId) {
 			case tutorialId:
@@ -376,6 +491,16 @@ async function openInThePopup(info, tab) {
 			case httpsPageId:
 			case viewSourceHttpPageId:
 			case viewSourceHttpsPageId:
+			case httpPopupId:
+			case httpsPopupId:
+			case viewSourceHttpPopupionId:
+			case viewSourceHttpsPopupionId:
+				url = new URL(info.pageUrl);
+				break;
+			case httpTabId:
+			case httpsTabId:
+			case viewSourceHttpTabionId:
+			case viewSourceHttpsTabionId:
 				url = new URL(tab.url);
 				break;
 			case httpBookmarkId:
@@ -407,13 +532,17 @@ async function openInThePopup(info, tab) {
 			case httpsBookmarkId:
 			case httpsLinkId:
 			case httpsPageId:
+			case httpsPopupId:
 			case httpsSelectionId:
+			case httpsTabId:
 				url.protocol = 'https';
 				break;
 			case viewSourceHttpsBookmarkId:
 			case viewSourceHttpsLinkId:
 			case viewSourceHttpsPageId:
+			case viewSourceHttpsPopupionId:
 			case viewSourceHttpsSelectionId:
+			case viewSourceHttpsTabionId:
 				url.href = url.href.replace(/^view-source:/, '');
 				url.protocol = 'https';
 				url.href = `view-source:${url.href}`;
@@ -421,10 +550,21 @@ async function openInThePopup(info, tab) {
 			case viewSourceHttpBookmarkId:
 			case viewSourceHttpLinkId:
 			case viewSourceHttpPageId:
+			case viewSourceHttpPopupionId:
 			case viewSourceHttpSelectionId:
+			case viewSourceHttpTabionId:
 				if (!url.href.startsWith('view-source:')) {
 					url.href = `view-source:${url.href}`;
 				}
+				break;
+		}
+
+		switch (info.menuItemId) {
+			case httpPopupId:
+			case httpsPopupId:
+			case viewSourceHttpPopupionId:
+			case viewSourceHttpsPopupionId:
+				browser.tabs.create({ url: url.href });
 				break;
 		}
 	} catch (e) {
@@ -453,11 +593,42 @@ async function openInThePopup(info, tab) {
 		}
 	}
 
-	browser.browserAction.setPopup({
-		popup: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href,
-		tabId: currentTabId,
-		windowId: currentWindowId
-	});
+	switch (info.menuItemId) {
+		case optionsId:
+		case tutorialId:
+		case httpsAudioId:
+		case httpsBookmarkId:
+		case httpsImageId:
+		case httpsLinkId:
+		case httpsPageId:
+		case httpsSelectionId:
+		case httpsTabId:
+		case httpsVideoId:
+		case viewSourceHttpsBookmarkId:
+		case viewSourceHttpsLinkId:
+		case viewSourceHttpsPageId:
+		case viewSourceHttpsSelectionId:
+		case viewSourceHttpsTabionId:
+		case httpAudioId:
+		case httpBookmarkId:
+		case httpImageId:
+		case httpLinkId:
+		case httpPageId:
+		case httpSelectionId:
+		case httpTabId:
+		case httpVideoId:
+		case viewSourceHttpBookmarkId:
+		case viewSourceHttpLinkId:
+		case viewSourceHttpPageId:
+		case viewSourceHttpSelectionId:
+		case viewSourceHttpTabionId:
+			browser.browserAction.setPopup({
+				popup: url === undefined ? new URL(browser.runtime.getURL('error/error.html')) : url.href,
+				tabId: currentTabId,
+				windowId: currentWindowId
+			});
+			break;
+	}
 }
 
 async function readValues() {
