@@ -5,6 +5,8 @@
 
 	"initialLocation": "InitialLocation",
 
+	"isPopupSizeFixEnabled": "IsPopupSizeFixEnabled",
+
 	"link": "Link",
 
 	"page": "Page",
@@ -12,6 +14,8 @@
 	"placement": "Placement",
 
 	"popup": "Popup",
+
+	"popupSize": "PopupSize",
 
 	"protocol": "Protocol",
 

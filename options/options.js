@@ -41,6 +41,9 @@ const targetViewSourceTabCheckbox = document.getElementById('target-view-source-
 const initialLocation = document.getElementById('initial-location');
 const additionalPermissionsBookmarksCheckbox = document.getElementById('additional-permissions-bookmarks');
 const additionalPermissionsHostCheckbox = document.getElementById('additional-permissions-host');
+const popupSizeFixEnabledCheckbox = document.getElementById('popupSizeFixEnabledCheckbox');
+const popupSizeHeightInput = document.getElementById('popupSizeHeightInput');
+const popupSizeWidthInput = document.getElementById('popupSizeWidthInput');
 const userAgentDefaultRadio = document.getElementById('user-agent-default');
 const userAgentFirefoxosRadio = document.getElementById('user-agent-firefoxos');
 const userAgentAndroidRadio = document.getElementById('user-agent-android');
@@ -61,6 +64,7 @@ async function main() {
 	checkCheckboxes();
 	checkInitialLocation();
 	checkPermissions();
+	checkPopupSize();
 	checkUserAgents();
 	checkPlacements();
 }
@@ -96,6 +100,8 @@ function addEventListeners() {
 	document.options.additionalPermissions.forEach(element => element.addEventListener('click', requestPermission));
 	browser.permissions.onAdded.addListener(checkPermissions);
 	browser.permissions.onRemoved.addListener(checkPermissions);
+	popupSizeFixEnabledCheckbox.addEventListener('click', popupSizeFixEnabledCheckboxOnClick);
+	document.options.popupSize.forEach(element => element.addEventListener('change', popupSizeInputOnChange));
 	document.options.userAgent.forEach(element => element.addEventListener('click', userAgentOnClick));
 	document.options.placement.forEach(element => element.addEventListener('click', placementOnClick));
 }
@@ -140,6 +146,7 @@ async function checkInitialLocation() {
 async function checkPermissions() {
 	additionalPermissionsBookmarksCheckbox.checked = await browser.permissions.contains(bookmarksPermissions);
 	additionalPermissionsHostCheckbox.checked = await browser.permissions.contains(hostPermissions);
+	togglePopupSizeInputDisabled(!additionalPermissionsHostCheckbox.checked);
 	toggleUserAgentRadioDisabled(!additionalPermissionsHostCheckbox.checked);
 }
 
@@ -156,6 +163,14 @@ async function checkPlacements() {
 			placementWindowRadio.checked = true;
 			break;
 	}
+}
+
+async function checkPopupSize() {
+	const item = await (await getStorageType()).get([storageKeys.isPopupSizeFixEnabled, storageKeys.popupSize]);
+	const popupSize = item[storageKeys.popupSize] ?? {};
+	popupSizeFixEnabledCheckbox.checked = item[storageKeys.isPopupSizeFixEnabled] === true;
+	popupSizeHeightInput.value = popupSize.height ?? '600px';
+	popupSizeWidthInput.value = popupSize.width ?? '800px';
 }
 
 async function checkProtocols() {
@@ -240,10 +255,16 @@ function initDocuments() {
 	document.getElementById('additionalPermissionsLegend').innerText = browser.i18n.getMessage('additionalPermissions');
 	document.getElementById('bookmarksLabel').innerText = browser.i18n.getMessage('bookmarks');
 	document.getElementById('hostLabel').innerText = browser.i18n.getMessage('host');
+	document.getElementById('popupSizeLegend').innerText = browser.i18n.getMessage('popupSize');
+	document.getElementById('popupSizeFixEnabledLabel').innerText = browser.i18n.getMessage('popupSizeDescription');
+	document.getElementById('popupSizeHeightLabel').innerText = browser.i18n.getMessage('height');
+	document.getElementById('popupSizeWidthLabel').innerText = browser.i18n.getMessage('width');
+	document.getElementById('popupSizeInformationDivision').innerText = browser.i18n.getMessage('thisFeatureRequiresHostPermission');
+	document.getElementById('popupSizeCautionDivision').innerText = browser.i18n.getMessage('optionsPopupSizeHTMLCaution');
 	document.getElementById('useragentLegend').innerText = browser.i18n.getMessage('useragent');
 	document.getElementById('defaultLabel').innerText = browser.i18n.getMessage('default');
-	document.getElementById('informationDivision').innerText = browser.i18n.getMessage('optionsUserAgentHTMLInformation');
-	document.getElementById('cautionDivision').innerText = browser.i18n.getMessage('optionsUserAgentHTMLCaution');
+	document.getElementById('useragentInformationDivision').textContent = browser.i18n.getMessage('thisFeatureRequiresHostPermission');
+	document.getElementById('useragentCautionDivision').textContent = browser.i18n.getMessage('optionsUserAgentHTMLCaution');
 	document.getElementById('placementLegend').innerText = browser.i18n.getMessage('placement');
 	document.getElementById('placementAllLabel').innerText = browser.i18n.getMessage('all');
 	document.getElementById('placementAllCautionLabel').innerText = browser.i18n.getMessage('placementAllCaution');
@@ -272,6 +293,24 @@ function placementOnClick(event) {
 			saveConfig({ [storageKeys.placement]: placements.window });
 			break;
 	}
+}
+
+function popupSizeFixEnabledCheckboxOnClick() {
+	saveConfig({ [storageKeys.isPopupSizeFixEnabled]: popupSizeFixEnabledCheckbox.checked });
+}
+
+function popupSizeInputOnChange() {
+	const height = popupSizeHeightInput.value.trim();
+	const width = popupSizeWidthInput.value.trim();
+	const isHeightValid = CSS.supports('min-height', height);
+	const isWidthValid = CSS.supports('min-width', width);
+	popupSizeHeightInput.style.backgroundColor = isHeightValid ? '' : 'red';
+	popupSizeWidthInput.style.backgroundColor = isWidthValid ? '' : 'red';
+	if (!isHeightValid || !isWidthValid) {
+		return;
+	}
+
+	saveConfig({ [storageKeys.popupSize]: { height, width } });
 }
 
 function protocolOnClick(event) {
@@ -311,9 +350,11 @@ async function requestPermission(event) {
 			if (additionalPermissionsHostCheckbox.checked) {
 				const accepted = await browser.permissions.request(hostPermissions);
 				additionalPermissionsHostCheckbox.checked = accepted;
+				togglePopupSizeInputDisabled(!accepted);
 				toggleUserAgentRadioDisabled(!accepted);
 			} else {
 				browser.permissions.remove(hostPermissions);
+				togglePopupSizeInputDisabled(true);
 				toggleUserAgentRadioDisabled(true);
 			}
 			break;
@@ -336,6 +377,10 @@ function targetOnClick(event) {
 			toggleTargetCheckboxesDisabled(false);
 			break;
 	}
+}
+
+function togglePopupSizeInputDisabled(disabled) {
+	document.options.popupSize.forEach(element => element.disabled = disabled);
 }
 
 function toggleTargetCheckboxesDisabled(disabled) {

@@ -14,20 +14,20 @@ body {
 	padding: 8px;
 }
 
-#initial-location {
-	border-width: 0px;
-	width: 100%;
+.caution {
+	background-color: black;
+	color: yellow;
+	padding: 4px;
 }
 
-#informationDivision {
+.information {
 	background-color: lightskyblue;
 	margin-top: 4px;
 	margin-bottom: 4px;
 	padding: 4px;
 }
 
-#cautionDivision {
-	background-color: black;
-	color: yellow;
-	padding: 4px;
+#initial-location {
+	border-width: 0px;
+	width: 100%;
 }

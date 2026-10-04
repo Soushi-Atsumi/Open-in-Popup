@@ -58,13 +58,29 @@
 			<input type="checkbox" id="additional-permissions-host" name="additionalPermissions"><label id="hostLabel"></label>
 		</fieldset><br>
 		<fieldset>
+			<legend id="popupSizeLegend"></legend>
+			<input type="checkbox" id="popupSizeFixEnabledCheckbox" name="popupSize" disabled><label id="popupSizeFixEnabledLabel"></label><br>
+			<table>
+				<tr>
+					<td><label id="popupSizeHeightLabel"></label></td>
+					<td><input type="text" id="popupSizeHeightInput" name="popupSize" value="600px" placeholder="600px" disabled></td>
+				</tr>
+				<tr>
+					<td><label id="popupSizeWidthLabel"></label></td>
+					<td><input type="text" id="popupSizeWidthInput" name="popupSize" value="800px" placeholder="800px" disabled></td>
+				</tr>
+			</table>
+			<div class="information" id="popupSizeInformationDivision"></div>
+			<div class="caution" id="popupSizeCautionDivision"></div>
+		</fieldset><br>
+		<fieldset>
 			<legend id="useragentLegend"></legend>
 			<input type="radio" id="user-agent-default" name="userAgent" checked disabled><label id="defaultLabel"></label><br>
 			<input type="radio" id="user-agent-firefoxos" name="userAgent" disabled><label id="firefoxosLabel">FirefoxOS</label><br>
 			<input type="radio" id="user-agent-android" name="userAgent" disabled><label id="androidLabel">Android</label><br>
 			<input type="radio" id="user-agent-ios" name="userAgent" disabled><label id="iosLabel">iOS</label><br>
-			<div id="informationDivision"></div>
-			<div id="cautionDivision"></div>
+			<div class="information" id="useragentInformationDivision"></div>
+			<div class="caution" id="useragentCautionDivision"></div>
 		</fieldset><br>
 		<fieldset>
 			<legend id="placementLegend"></legend>

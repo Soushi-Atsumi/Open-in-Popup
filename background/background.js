@@ -20,6 +20,8 @@ let userAgents;
 let currentSettings;
 let currentTabId;
 let currentWindowId;
+let popupSizeContentScriptRegistration;
+let popupSizeContentScriptSync = Promise.resolve();
 
 const optionsId = 'options';
 const tutorialId = 'tutorial';
@@ -90,6 +92,7 @@ async function main() {
 		} else if (hostPermissions.origins.every(origin => permissions.origins.includes(origin))) {
 			browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersListener, filter, extraInfoSpec);
 		}
+		togglePopupSizeContentScript();
 	};
 	const permissionsOnRemovedListener = permissions => {
 		if (bookmarksPermissions.permissions.every(permission => permissions.permissions.includes(permission))) {
@@ -97,16 +100,27 @@ async function main() {
 		} else if (hostPermissions.origins.every(origin => permissions.origins.includes(origin))) {
 			browser.webRequest.onBeforeSendHeaders.removeListener(onBeforeSendHeadersListener);
 		}
+		togglePopupSizeContentScript();
 	};
 	browser.permissions.onAdded.addListener(permissionsOnAddedListener);
 	browser.permissions.onRemoved.addListener(permissionsOnRemovedListener);
-	browser.runtime.onMessage.addListener(async (message, _0, _1) => {
+	browser.runtime.onMessage.addListener(async (message, sender) => {
 		if (message.action === 'refresh') {
 			currentSettings = await (await getStorageType()).get();
 			updateContextMenus();
+			togglePopupSizeContentScript();
+		} else if (message.action === 'requestPopupSizeFix') {
+			const shouldFix = currentSettings[storageKeys.isPopupSizeFixEnabled] === true && sender.tab === undefined;
+			const popupSize = currentSettings[storageKeys.popupSize] ?? {};
+			return {
+				shouldFix,
+				height: popupSize.height ?? '600px',
+				width: popupSize.width ?? '800px'
+			};
 		}
 	});
 	currentSettings = await (await getStorageType()).get();
+	togglePopupSizeContentScript();
 	await createContextMenus();
 	if (await browser.permissions.contains(hostPermissions)) {
 		browser.webRequest.onBeforeSendHeaders.addListener(onBeforeSendHeadersListener, filter, extraInfoSpec);
@@ -668,4 +682,22 @@ async function updateContextMenus() {
 			browser.contextMenus.update(contextMenusObject[i][j].id, { visible: contextMenusObject[i][j].visible });
 		}
 	}
+}
+
+function togglePopupSizeContentScript() {
+	popupSizeContentScriptSync = popupSizeContentScriptSync.then(async () => {
+		const shouldRegister = currentSettings[storageKeys.isPopupSizeFixEnabled] === true && await browser.permissions.contains(hostPermissions);
+
+		if (shouldRegister && popupSizeContentScriptRegistration === undefined) {
+			popupSizeContentScriptRegistration = await browser.contentScripts.register({
+				matches: hostPermissions.origins,
+				js: [{ file: '/content/content.js' }],
+				runAt: 'document_end',
+				allFrames: false
+			});
+		} else if (!shouldRegister && popupSizeContentScriptRegistration !== undefined) {
+			popupSizeContentScriptRegistration.unregister();
+			popupSizeContentScriptRegistration = undefined;
+		}
+	});
 }

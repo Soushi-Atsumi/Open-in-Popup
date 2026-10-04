@@ -50,6 +50,10 @@
 		"message": "host"
 	},
 
+	"height": {
+		"message": "Height"
+	},
+
 	"iconImageAlt": {
 		"message": "The icon of this extension.",
 		"description": "The alternate description of the icon of this extention."
@@ -166,12 +170,12 @@
 		"description": "The title of options.html."
 	},
 
-	"optionsUserAgentHTMLInformation": {
-		"message": "This feature requires the host permission."
+	"optionsPopupSizeHTMLCaution": {
+		"message": "This overwrites the size of the popup and affects all extension pages, including sidebars."
 	},
 
 	"optionsUserAgentHTMLCaution": {
-		"message": "This overwrites the user agent and it effects a page of all extensions."
+		"message": "This overwrites the user agent and affects all extension pages, including sidebars."
 	},
 
 	"placement": {
@@ -202,6 +206,14 @@
 		"message": "Overwrite popups at the current window."
 	},
 
+	"popupSize": {
+		"message": "Popup size"
+	},
+
+	"popupSizeDescription": {
+		"message": "Attempts to fix the popup size if enabled. Useful for sites that do not display properly."
+	},
+
 	"popupHTMLTitle": {
 		"message": "Open in Popup",
 		"description": "The title of popup.html"
@@ -225,6 +237,10 @@
 
 	"target": {
 		"message": "Target"
+	},
+
+	"thisFeatureRequiresHostPermission": {
+		"message": "This feature requires the host permission."
 	},
 
 	"thisUrlIsNotAValidUrl": {
@@ -252,6 +268,10 @@
 
 	"viewSource": {
 		"message": "View source"
+	},
+
+	"width": {
+		"message": "Width"
 	},
 
 	"viewSourceFromBookmark": {

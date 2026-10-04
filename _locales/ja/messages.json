@@ -50,6 +50,10 @@
 		"message": "ホスト"
 	},
 
+	"height": {
+		"message": "高さ"
+	},
+
 	"iconImageAlt": {
 		"message": "拡張機能のアイコン。",
 		"description": "この拡張機能の代替説明。"
@@ -166,12 +170,12 @@
 		"description": "options.htmlの題名。"
 	},
 
-	"optionsUserAgentHTMLInformation": {
-		"message": "この機能はホスト権限を必要とします。"
+	"optionsPopupSizeHTMLCaution": {
+		"message": "これはポップアップのサイズを上書きし、サイドバーなどを含む全ての拡張機能のページに影響します。"
 	},
 
 	"optionsUserAgentHTMLCaution": {
-		"message": "これはユーザーエージェントを上書きし、全ての拡張機能のページに影響します。"
+		"message": "これはユーザーエージェントを上書きし、サイドバーなどを含む全ての拡張機能のページに影響します。"
 	},
 
 	"placement": {
@@ -202,6 +206,14 @@
 		"message": "現在のウィンドウに存在するポップアップを上書きします。"
 	},
 
+	"popupSize": {
+		"message": "ポップアップのサイズ"
+	},
+
+	"popupSizeDescription": {
+		"message": "有効にするとポップアップのサイズの固定を試みます。正常に表示されないサイトで有用です。"
+	},
+
 	"popupHTMLTitle": {
 		"message": "ポップアップで開く",
 		"description": "popup.htmlの題名。"
@@ -225,6 +237,10 @@
 
 	"target": {
 		"message": "対象"
+	},
+
+	"thisFeatureRequiresHostPermission": {
+		"message": "この機能はホスト権限を必要とします。"
 	},
 
 	"thisUrlIsNotAValidUrl": {
@@ -252,6 +268,10 @@
 
 	"viewSource": {
 		"message": "ソースを見る"
+	},
+
+	"width": {
+		"message": "幅"
 	},
 
 	"viewSourceFromBookmark": {

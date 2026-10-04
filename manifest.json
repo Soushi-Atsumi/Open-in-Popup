@@ -20,6 +20,9 @@
 
 	"browser_specific_settings": {
 		"gecko": {
+			"data_collection_permissions": {
+				"required": [ "none" ]
+			},
 			"id": "{4ae76e8a-0610-47c5-8ec4-1895518e82e9}",
 			"strict_min_version": "77.0"
 		}
@@ -65,5 +68,5 @@
 
 	"permissions": [ "activeTab", "contextMenus", "storage", "webRequest", "webRequestBlocking" ],
 
-	"version": "4.4"
+	"version": "4.5"
 }
